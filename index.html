@@ -91,7 +91,7 @@
 
 				info.update = function (props) {
 					this._div.innerHTML = '<h4>Setores Comerciais</h4><br />' +  (props ?
-						'<b>Setor Comercial: ' + props.sco_num_sc + '</b><br />' + props.sco_dsc_loc + '<br />' + props.sco_dsc_un + '<br />' + props.sco_dsc_sa
+						'<b>Setor Comercial: ' + props.sco_num_sc + '</b><br /><b>Localidade:</b> ' + props.sco_dsc_loc + '<br /><b>UN:</b> ' + props.sco_dsc_un + '<br /><b>Set. de Abast.:</b> ' + props.sco_dsc_sa
 						: 'Passe o mouse');
 				};
 
@@ -189,7 +189,7 @@
 
 					var div = L.DomUtil.create('div', 'info legend'),
 						grades = [0, 10, 20, 30, 40, 50, 60, 70],
-						labels = [],
+						labels = ["<small>Nº Setores Comerciais</small><br />"],
 						from, to;
 
 					for (var i = 0; i < grades.length; i++) {
@@ -207,11 +207,13 @@
 
 				legend.addTo(map);
 
+				function LatLngToArrayString(ll) {
+					return "["+ ll.lat.toFixed(5)+", "+ll.lng.toFixed(5)+"]";
+				}
+
 			});
 
-			function LatLngToArrayString(ll) {
-				return "["+ ll.lat.toFixed(5)+", "+ll.lng.toFixed(5)+"]";
-			}
+			
 
 		</script>
 
