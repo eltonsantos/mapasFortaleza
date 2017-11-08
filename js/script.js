@@ -1,5 +1,6 @@
 // Variáveis
 var map;
+var camadaMapa;
 var info;
 var geojson;
 var legend;
@@ -10,11 +11,22 @@ var labels;
 var from;
 var to;
 var search;
-var zoom;
+var zoomSearch;
+var altaOpacidade;
+var baixaOpacidade;
+var opacidade;
+var button;
+var escala;
+var pan;
 
 $(function(){
 
 	map = L.map('map').setView([ -3.794,  -38.545], 12);
+	//map = L.map('map', {center: [-3.794, -38.545], zoom: 12, zoomControl: false, attributionControl:false});
+
+	$('#btnLocate').click(function(){
+		map.locate();
+	});
 
 	map.on('zoomend', function(){
 		$('#zoom-level').html(map.getZoom());
@@ -29,11 +41,24 @@ $(function(){
 	});
 
 
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 50,
+	camadaMapa = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		minZoom: 11,
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
 			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
 		id: 'mapbox.light'
+	}).addTo(map);
+
+	// Mostra os controles
+	/*
+	pan = L.control.pan({
+		position: 'topleft'
+	}).addTo(map);
+	*/
+	
+	// Mostrar sua localização
+	button = L.easyButton('glyphicon-screenshot', function(){
+		map.locate();
 	}).addTo(map);
 
 	// Mostra as informações no mouse hover
@@ -83,7 +108,6 @@ $(function(){
 
 	legend.addTo(map);
 
-
 	// BUSCA
 	search = new L.Control.Search({
 		container: 'buscar',
@@ -91,13 +115,13 @@ $(function(){
 		propertyName: 'sco_num_sc',
 		marker: false,
 		moveToLocation: function(latlng, title, map){
-			zoom = map.getBoundsZoom(latlng.layer.getBounds());
-			map.setView(latlng, zoom);
+			zoomSearch = map.getBoundsZoom(latlng.layer.getBounds());
+			map.setView(latlng, zoomSearch);
 		}
 	});
 
 	search.on('search:locationfound', function(e){
-		e.layer.setStyle({weight: 5, color:'#666'});
+		e.layer.setStyle({weight: 7, color:'#666'});
 		if (e.layer._popup){
 			e.layer.openPopup();
 		}
@@ -108,8 +132,16 @@ $(function(){
 	});
 
 	map.addControl(search);
-	
 
+	// 	OPACIDADE
+    opacidade = new L.Control.opacitySlider({
+    	position: 'topleft'
+    });
+    map.addControl(opacidade);
+
+    opacidade.setOpacityLayer(camadaMapa);
+    camadaMapa.setOpacity(0.5);
+	
 	// FUNÇÕES
 
 	// pega cor de acordo com a condição estabelecida

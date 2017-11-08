@@ -1,6 +1,6 @@
 #map {
 	width: 100%;
-	height: 784px;
+	height: 869px;
 }
 .info {
 	padding: 6px 8px;
@@ -29,7 +29,7 @@
 
 #top {
 	background-color: #1B6D9F;
-	height: 85px;
+	height: 90px;
 }
 
 .navbar-icons {
@@ -56,21 +56,29 @@
 	background-color: #1B6D9F; 
 }
 
-.retWhite {
-	width: 100%;
-	background-color: #ffffff;
-    height: 5px;
-}
-
 .retGreen {
 	width: 100%;
 	background-color: #88C641;
     min-height: 10px;
-    margin-top: -5px;
+    margin-top: -15px;
 }
 
 .marginLogoCagece {text-align: center;}
 
 input.search-input {
 	border: 0px !important;
+}
+
+.easy-button-container {
+	left: 25px;
+}
+
+.leaflet-control-zoomslider {
+	top: 0px;
+	left: 24px;
+}
+
+.opacity_slider_control {
+	top: 0px;
+	left: 35px;
 }
