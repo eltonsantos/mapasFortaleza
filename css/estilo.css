@@ -70,3 +70,7 @@
 }
 
 .marginLogoCagece {text-align: center;}
+
+input.search-input {
+	border: 0px !important;
+}

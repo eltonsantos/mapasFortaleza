@@ -10,6 +10,7 @@ var labels;
 var from;
 var to;
 var search;
+var zoom;
 
 $(function(){
 
@@ -85,14 +86,29 @@ $(function(){
 
 	// BUSCA
 	search = new L.Control.Search({
-		position:'bottomleft',		
-		layer: statesData,
-		initial: false,
-		zoom: 12,
-		marker: false
+		container: 'buscar',
+		layer: geojson,
+		propertyName: 'sco_num_sc',
+		marker: false,
+		moveToLocation: function(latlng, title, map){
+			zoom = map.getBoundsZoom(latlng.layer.getBounds());
+			map.setView(latlng, zoom);
+		}
 	});
 
-	map.addTo(search);
+	search.on('search:locationfound', function(e){
+		e.layer.setStyle({weight: 5, color:'#666'});
+		if (e.layer._popup){
+			e.layer.openPopup();
+		}
+	}).on('search:collapsed', function(e){
+		geojson.eachLayer(function(layer){
+			geojson.resetStyle(layer);
+		});
+	});
+
+	map.addControl(search);
+	
 
 	// FUNÇÕES
 
