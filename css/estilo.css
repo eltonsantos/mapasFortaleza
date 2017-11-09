@@ -1,6 +1,7 @@
 #map {
 	width: 100%;
-	height: 869px;
+	height: 849px;
+
 }
 .info {
 	padding: 6px 8px;
@@ -81,4 +82,8 @@ input.search-input {
 .opacity_slider_control {
 	top: 0px;
 	left: 35px;
+}
+
+.leaflet-bar {
+	left: 25px;
 }

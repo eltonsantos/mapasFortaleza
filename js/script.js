@@ -18,14 +18,18 @@ var opacidade;
 var button;
 var escala;
 var pan;
+var medida;
+var popupConteudo;
 
 $(function(){
 
-	map = L.map('map').setView([ -3.794,  -38.545], 12);
+	map = L.map('map', function(){
+		zoomControl: false
+	}).setView([ -3.794,  -38.545], 12);
 	//map = L.map('map', {center: [-3.794, -38.545], zoom: 12, zoomControl: false, attributionControl:false});
 
 	$('#btnLocate').click(function(){
-		map.locate();
+		map.setView([ -3.794,  -38.545], 12);
 	});
 
 	map.on('zoomend', function(){
@@ -40,7 +44,6 @@ $(function(){
 		$('#mouse-location').html(LatLngToArrayString(e.latlng));
 	});
 
-
 	camadaMapa = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
 		minZoom: 11,
@@ -49,16 +52,31 @@ $(function(){
 		id: 'mapbox.light'
 	}).addTo(map);
 
-	// Mostra os controles
-	/*
+	// Mostra os controles	
 	pan = L.control.pan({
 		position: 'topleft'
 	}).addTo(map);
-	*/
+
+	// Mostrar escala
+	escala = L.control.scale({
+		position: 'bottomleft',
+		imperial: false,
+		maxWidth: 200
+	}).addTo(map);
+
+	// Mostrar medidas
+	medida = L.control.polylineMeasure({
+		clearMeasurementsOnStop: false,
+		showMeasurementsClearControl: true
+	}).addTo(map);
+/*s
+	$("#polyline-measure-control").click(function(){
+		map.removeControl(map.zoomControl);
+	});*/
 	
 	// Mostrar sua localização
-	button = L.easyButton('glyphicon-screenshot', function(){
-		map.locate();
+	button = L.easyButton('glyphicon-home', function(){
+		map.setView([ -3.794,  -38.545], 12);
 	}).addTo(map);
 
 	// Mostra as informações no mouse hover
@@ -196,11 +214,20 @@ $(function(){
 	}
 
 	function onEachFeature(feature, layer) {
+		popupConteudo = "<b>Setor Comercial: " + feature.properties.sco_num_sc + "</b><br /><b>Localidade:</b> " + feature.properties.sco_dsc_loc + "<br /><b>UN:</b> " + feature.properties.sco_dsc_un + "<br /><b>Set. de Abast.:</b> " + feature.properties.sco_dsc_sa;
+
+		if (feature.properties && feature.properties.popupConteudo) {
+			popupConteudo += feature.properties.popupConteudo;
+		}
+		
+		layer.bindPopup(popupConteudo);
+
 		layer.on({
 			mouseover: highlightFeature,
 			mouseout: resetHighlight,
 			click: zoomToFeature
 		});
+
 	}
 
 	function LatLngToArrayString(ll) {
