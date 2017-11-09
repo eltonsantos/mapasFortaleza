@@ -87,3 +87,7 @@ input.search-input {
 .leaflet-bar {
 	left: 25px;
 }
+
+.leaflet-control-zoom a.leaflet-control-zoom-in, .leaflet-control-zoom a.leaflet-control-zoom-out {
+	display: none;
+}

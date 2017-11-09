@@ -15,11 +15,12 @@ var zoomSearch;
 var altaOpacidade;
 var baixaOpacidade;
 var opacidade;
-var button;
+var buttonHome;
 var escala;
 var pan;
 var medida;
 var popupConteudo;
+var zoomBar;
 
 $(function(){
 
@@ -35,10 +36,10 @@ $(function(){
 	map.on('zoomend', function(){
 		$('#zoom-level').html(map.getZoom());
 	});
-
+	/*
 	map.on('moveend', function(){
 		$('#map-center').html(LatLngToArrayString(map.getCenter()));
-	});
+	});*/
 
 	map.on('mousemove', function(e){
 		$('#mouse-location').html(LatLngToArrayString(e.latlng));
@@ -73,11 +74,16 @@ $(function(){
 	$("#polyline-measure-control").click(function(){
 		map.removeControl(map.zoomControl);
 	});*/
+
+	// Mostrar zoom
+	zoomBar = new L.Control.ZoomBar().addTo(map);
 	
 	// Mostrar sua localização
-	button = L.easyButton('glyphicon-home', function(){
+	/*
+	buttonHome = L.easyButton('glyphicon-home', function(){
 		map.setView([ -3.794,  -38.545], 12);
 	}).addTo(map);
+	*/
 
 	// Mostra as informações no mouse hover
 	info = L.control();
@@ -231,7 +237,7 @@ $(function(){
 	}
 
 	function LatLngToArrayString(ll) {
-		return "["+ ll.lat.toFixed(5)+", "+ll.lng.toFixed(5)+"]";
+		return "<b>X:</b> "+ ll.lat.toFixed(5)+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Y:</b> "+ll.lng.toFixed(5);
 	}
 
 });

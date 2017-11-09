@@ -23,6 +23,8 @@
 	    <link rel="stylesheet" type="text/css" href="css/L.Control.Pan.css" />
 	    <!-- Plugin ZoomSlider -->
 	    <link rel="stylesheet" type="text/css" href="css/L.Control.Zoomslider.css" />
+	    <!-- Plugin ZoomSlider -->
+	    <link rel="stylesheet" type="text/css" href="css/L.Control.ZoomBar.css" />
 	    <!-- Plugin PolylineMeasure -->
 	    <link rel="stylesheet" type="text/css" href="css/Leaflet.PolylineMeasure.css" />
 	    <!-- -Estilo da página -->
@@ -82,13 +84,19 @@
 			
 			<br />
 			<button id="btnLocate" class="btn btn-primary btn-block">Locate</button>
-			<h5>Zoom Level: <span id="zoom-level"></span></h5>
-			<h5>Map Center: <span id="map-center"></span></h5>
-			<h5>Mouse Location: <span id="mouse-location"></span></h5>
+			<br />
 			<div>
 				<b>Buscar por Setor Comercial:</b>
 				<div id="buscar" class="form-control"></div>
 			</div>
+			<br />
+			<h5><b>Nível do zoom:</b> <span id="zoom-level"></span></h5>
+			<!--<h5>Coordenadas do centro do mapa: <span id="map-center"></span></h5>-->
+			<h5><b>Coordenadas:</b>
+				<br />
+				<span id="mouse-location"></span>
+			</h5>
+			
 			
 		</div>
 
@@ -116,6 +124,8 @@
 		<script type="text/javascript" src="js/L.Control.Pan.js" ></script> 
 		<!-- Plugin ZoomSlider -->
 		<script type="text/javascript" src="js/L.Control.Zoomslider.js"></script>
+		<!-- Plugin ZoomSlider -->
+		<script type="text/javascript" src="js/L.Control.ZoomBar.js"></script>
 		<!-- Plugin PolylineMeasure -->
 		<script src="js/Leaflet.PolylineMeasure.js"></script>
 		<!-- Script da página -->
