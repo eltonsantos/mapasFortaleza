@@ -10,7 +10,7 @@ var grade;
 var labels;
 var from;
 var to;
-var search;
+var searchControl;
 var zoomSearch;
 var altaOpacidade;
 var baixaOpacidade;
@@ -70,20 +70,20 @@ $(function(){
 		clearMeasurementsOnStop: false,
 		showMeasurementsClearControl: true
 	}).addTo(map);
-/*s
+/*
 	$("#polyline-measure-control").click(function(){
 		map.removeControl(map.zoomControl);
-	});*/
-
+	});
+*/
 	// Mostrar zoom
 	zoomBar = new L.Control.ZoomBar().addTo(map);
 	
 	// Mostrar sua localização
-	/*
+/*
 	buttonHome = L.easyButton('glyphicon-home', function(){
 		map.setView([ -3.794,  -38.545], 12);
 	}).addTo(map);
-	*/
+*/
 
 	// Mostra as informações no mouse hover
 	info = L.control();
@@ -96,7 +96,7 @@ $(function(){
 
 	info.update = function (props) {
 		this._div.innerHTML = '<h4>Setores Comerciais</h4><br />' +  (props ?
-			'<b>Setor Comercial: ' + props.sco_num_sc + '</b><br /><b>Localidade:</b> ' + props.sco_dsc_loc + '<br /><b>UN:</b> ' + props.sco_dsc_un + '<br /><b>Set. de Abast.:</b> ' + props.sco_dsc_sa
+			'<b>Setor Comercial: ' + props.sco_num_sc + '</b><br /><b>Localidade:</b> ' + props.sco_dsc_loc + '<br /><b>UN:</b> ' + props.sco_dsc_un + '<br /><b>Set. de Abast.:</b> ' + props.sco_dsc_sa + '<br /><b>Código do Set. de Abast.:</b> ' + props.sco_cod_sa
 			: 'Passe o mouse');
 	};
 
@@ -133,10 +133,16 @@ $(function(){
 	legend.addTo(map);
 
 	// BUSCA
-	search = new L.Control.Search({
+/*
+	map.on('mousemove', function(e){
+		$('#mouse-location').html(LatLngToArrayString(e.latlng));
+	});
+*/
+
+	searchControl = new L.Control.Search({
 		container: 'buscar',
 		layer: geojson,
-		propertyName: 'sco_num_sc',
+		propertyName: 'sco_dsc_sa',
 		marker: false,
 		moveToLocation: function(latlng, title, map){
 			zoomSearch = map.getBoundsZoom(latlng.layer.getBounds());
@@ -144,8 +150,11 @@ $(function(){
 		}
 	});
 
-	search.on('search:locationfound', function(e){
-		e.layer.setStyle({weight: 7, color:'#666'});
+	searchControl.on('search:locationfound', function(e){
+		e.layer.setStyle({
+			weight: 7,
+			color:'#f90'
+		});
 		if (e.layer._popup){
 			e.layer.openPopup();
 		}
@@ -155,7 +164,7 @@ $(function(){
 		});
 	});
 
-	map.addControl(search);
+	map.addControl(searchControl);
 
 	// 	OPACIDADE
     opacidade = new L.Control.opacitySlider({
@@ -220,7 +229,7 @@ $(function(){
 	}
 
 	function onEachFeature(feature, layer) {
-		popupConteudo = "<b>Setor Comercial: " + feature.properties.sco_num_sc + "</b><br /><b>Localidade:</b> " + feature.properties.sco_dsc_loc + "<br /><b>UN:</b> " + feature.properties.sco_dsc_un + "<br /><b>Set. de Abast.:</b> " + feature.properties.sco_dsc_sa;
+		popupConteudo = "<b>Setor Comercial: " + feature.properties.sco_num_sc + "</b><br /><b>Localidade:</b> " + feature.properties.sco_dsc_loc + "<br /><b>UN:</b> " + feature.properties.sco_dsc_un + "<br /><b>Set. de Abast.:</b> " + feature.properties.sco_dsc_sa + "<br /><b>Código do Set. de Abast.:</b> " + feature.properties.sco_cod_sa;
 
 		if (feature.properties && feature.properties.popupConteudo) {
 			popupConteudo += feature.properties.popupConteudo;
@@ -238,6 +247,11 @@ $(function(){
 
 	function LatLngToArrayString(ll) {
 		return "<b>X:</b> "+ ll.lat.toFixed(5)+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Y:</b> "+ll.lng.toFixed(5);
+	}
+
+	// Retornar um valor composto na busca
+	function SearchControlToArrayString(sc){
+		return sc.sco_num_sc + " - " + sc.sco_dsc_loc + " - " + sc.sco_dsc_un;
 	}
 
 });
