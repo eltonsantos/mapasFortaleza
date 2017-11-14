@@ -1,8 +1,13 @@
 // Variáveis
 var map;
 var camadaMapa;
+var camadaTopo;
+var camadaImagery;
+var controleCamadas;
+var objBasemaps;
+var objSobrecamadas;
 var info;
-var geojson;
+var sobrecamada;
 var legend;
 var layer;
 var div;
@@ -12,8 +17,6 @@ var from;
 var to;
 var searchControl;
 var zoomSearch;
-var altaOpacidade;
-var baixaOpacidade;
 var opacidade;
 var buttonHome;
 var escala;
@@ -21,13 +24,22 @@ var pan;
 var medida;
 var popupConteudo;
 var zoomBar;
+var posicaoMouse;
 
 $(function(){
-
+	/*
 	map = L.map('map', function(){
 		zoomControl: false
 	}).setView([ -3.794,  -38.545], 12);
-	//map = L.map('map', {center: [-3.794, -38.545], zoom: 12, zoomControl: false, attributionControl:false});
+	*/
+
+	map = L.map('map', {
+		center: [-3.794, -38.545],
+		zoom: 12,
+		maxZoom: 18,
+		minZoom: 7,
+		zoomControl: false
+	});
 
 	$('#btnLocate').click(function(){
 		map.setView([ -3.794,  -38.545], 12);
@@ -39,19 +51,48 @@ $(function(){
 	/*
 	map.on('moveend', function(){
 		$('#map-center').html(LatLngToArrayString(map.getCenter()));
-	});*/
-
+	});
 	map.on('mousemove', function(e){
 		$('#mouse-location').html(LatLngToArrayString(e.latlng));
 	});
+	*/
+	/*
+	$('#sldOpacity').on('change', function(){
+		$('#image-opacity').html(this.value);
+
+		sobrecamada.setOpacity(this.value);
+				
+	});
+	*/
 
 	camadaMapa = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		minZoom: 7,
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		id: 'mapbox.light'
+		id: 'mapbox.light',
+		attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+	});
+	camadaTopo = L.tileLayer.provider('OpenTopoMap', {
+		attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+	});
+	camadaImagery = L.tileLayer.provider('Esri.WorldImagery');
+
+	map.addLayer(camadaMapa);
+
+	// Overlayer
+	sobrecamada = L.geoJson(statesData, {
+		style: style,
+		onEachFeature: onEachFeature
 	}).addTo(map);
+
+	objBasemaps = {
+		"Mapa tradicional": camadaMapa,
+		"OpenTopoMap": camadaTopo,
+		"Satélite": camadaImagery
+	};
+
+	objSobrecamadas = {
+		'Setores Comerciais': sobrecamada
+	};
+
+	controleCamadas = L.control.layers(objBasemaps, objSobrecamadas).addTo(map);
 
 	// Mostra os controles	
 	pan = L.control.pan({
@@ -64,6 +105,9 @@ $(function(){
 		imperial: false,
 		maxWidth: 200
 	}).addTo(map);
+
+	// Posição do mouse
+	posicaoMouse = L.control.mousePosition().addTo(map);
 
 	// Mostrar medidas
 	medida = L.control.polylineMeasure({
@@ -102,12 +146,7 @@ $(function(){
 
 	info.addTo(map);
 
-	geojson = L.geoJson(statesData, {
-		style: style,
-		onEachFeature: onEachFeature
-	}).addTo(map);
-
-	map.attributionControl.addAttribution('Setores Comerciais &copy; <a href="http://www.cagece.com.br/">CAGECE</a>');
+	//map.attributionControl.addAttribution('Setores Comerciais &copy; <a href="http://www.cagece.com.br/">CAGECE</a>');
 
 	legend = L.control({position: 'bottomright'});
 
@@ -133,15 +172,9 @@ $(function(){
 	legend.addTo(map);
 
 	// BUSCA
-/*
-	map.on('mousemove', function(e){
-		$('#mouse-location').html(LatLngToArrayString(e.latlng));
-	});
-*/
-
 	searchControl = new L.Control.Search({
 		container: 'buscar',
-		layer: geojson,
+		layer: sobrecamada,
 		propertyName: 'sco_dsc_sa',
 		marker: false,
 		moveToLocation: function(latlng, title, map){
@@ -159,24 +192,23 @@ $(function(){
 			e.layer.openPopup();
 		}
 	}).on('search:collapsed', function(e){
-		geojson.eachLayer(function(layer){
-			geojson.resetStyle(layer);
+		sobrecamada.eachLayer(function(layer){
+			sobrecamada.resetStyle(layer);
 		});
 	});
 
 	map.addControl(searchControl);
 
+
 	// 	OPACIDADE
-    opacidade = new L.Control.opacitySlider({
-    	position: 'topleft'
-    });
-    map.addControl(opacidade);
+	$('#sldOpacity').on('change', function(){
+		$('#image-opacity').html(this.value);
+		console.log(typeof(sobrecamada));
+		sobrecamada.setStyle({ opacity: this.value, fillOpacity: this.value})	
+	});
 
-    opacidade.setOpacityLayer(camadaMapa);
-    camadaMapa.setOpacity(0.5);
-	
+
 	// FUNÇÕES
-
 	// pega cor de acordo com a condição estabelecida
 	function getColor(d) {
 		return  d > 70 ? '#800026' :
@@ -189,7 +221,6 @@ $(function(){
 						 '#FFEDA0' ;
 	}
 
-
 	function style(feature) {
 		return {
 			weight: 2,
@@ -200,7 +231,6 @@ $(function(){
 			fillColor: getColor(feature.properties.sco_num_sc)
 		};
 	}
-
 
 	function highlightFeature(e) {
 		layer = e.target;
@@ -220,7 +250,7 @@ $(function(){
 	}
 
 	function resetHighlight(e) {
-		geojson.resetStyle(e.target);
+		sobrecamada.resetStyle(e.target);
 		info.update();
 	}
 

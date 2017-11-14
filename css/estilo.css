@@ -1,6 +1,6 @@
 #map {
 	width: 100%;
-	height: 849px;
+	height: 869px;
 
 }
 .info {
@@ -30,11 +30,20 @@
 
 #top {
 	background-color: #1B6D9F;
-	height: 90px;
+	height: 60px;
 }
 
+#logoCagece {margin: -10px}
+
+.subtitle {
+	color: #fff;
+    line-height: 63px;
+    font-size: 25px;
+    margin-left: 15px;
+}
 .navbar-icons {
-	margin: 10px 0px 10px 0px;
+	height: 60px;
+	font-size: 15px;
 }
 
 .navbar-icons li a {

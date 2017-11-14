@@ -76,7 +76,15 @@ L.Control.opacitySlider = L.Control.extend({
           },
           slide: function ( event, ui ) {
             var slider_value = ui.value / 100;
-            opacity_layer.setOpacity(slider_value);
+            //opacity_layer.setOpacity(slider_value);
+            if (typeof opacity_layer._url === 'undefined'){
+                opacity_layer.setStyle({
+                        opacity:slider_value,
+                        fillOpacity: slider_value
+                    });
+            }else{
+                opacity_layer.setOpacity(slider_value);
+            }
           }
         });
         
