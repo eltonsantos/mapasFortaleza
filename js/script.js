@@ -7,9 +7,9 @@ var controleCamadas;
 var objBasemaps;
 var objSobrecamadas;
 var info;
-var setoresOverlay;
+var setoresComerciaisOverlay;
 var hidrantesOverlay;
-var coletoresOverlay;
+var redesAguaOverlay;
 var legend;
 var layer;
 var div;
@@ -61,30 +61,41 @@ $(function(){
 		map.addLayer(camadaMapa);
 
 		// Overlayer
-		setoresOverlay = L.geoJson(setoresComerciais, {
+		setoresComerciaisOverlay = L.geoJson(setoresComerciais, {
 			style: style,
 			onEachFeature: onEachFeature
 		}).addTo(map);
 
-		coletoresOverlay = L.geoJson(coletores, {
-			style: style,
-			onEachFeature: onEachFeature
+
+		redesAguaOverlay = L.geoJson(rede_agua, {
+			style: function (feature) {
+				return feature.properties && feature.properties.style;
+			},
+			onEachFeature: onEachFeature,
+			pointToLayer: function (feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 8,
+					fillColor: "#ff7800",
+					color: "#000",
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
 		}).addTo(map);
+
 
 		hidrantesOverlay = L.geoJSON(hidrantes, {
-			style: style,
-			pointToLayer : function(feature, latlng) {
-                return L.circleMarker(latlng, {
-                    radius : 8,
-                    fillColor : "#ff7800",
-                    color : "#000",
-                    weight : 1,
-                    opacity : 1,
-                    fillOpacity : 0.8
-                });
-            }
-
+			filter: function (feature, layer) {
+				if (feature.properties) {
+					// If the property "underConstruction" exists and is true, return false (don't render features under construction)
+					return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
+				}
+				return false;
+			},
+			onEachFeature: onEachFeature
 		}).addTo(map);
+
 
 		objBasemaps = {
 			"Mapa tradicional": camadaMapa,
@@ -93,8 +104,8 @@ $(function(){
 		};
 
 		objSobrecamadas = {
-			'Setores Comerciais': setoresOverlay,
-			'Coletores': coletoresOverlay,
+			'Setores Comerciais': setoresComerciaisOverlay,
+			'Redes de Água': redesAguaOverlay,
 			'Hidrantes': hidrantesOverlay
 		};
 
@@ -127,14 +138,14 @@ $(function(){
 		// 	OPACIDADE
 		$('#sldOpacity').on('change', function(){
 			$('#image-opacity').html(this.value);
-			console.log(typeof(setoresOverlay));
-			setoresOverlay.setStyle({ opacity: this.value, fillOpacity: this.value})	
+			console.log(typeof(setoresComerciaisOverlay));
+			setoresComerciaisOverlay.setStyle({ opacity: this.value, fillOpacity: this.value})	
 		});
 
 		// BUSCA
 		searchControl = new L.Control.Search({
 			container: 'buscar',
-			layer: setoresOverlay,
+			layer: setoresComerciaisOverlay,
 			propertyName: 'sco_dsc_sa',
 			marker: false,
 			moveToLocation: function(latlng, title, map){
@@ -152,8 +163,8 @@ $(function(){
 				e.layer.openPopup();
 			}
 		}).on('search:collapsed', function(e){
-			setoresOverlay.eachLayer(function(layer){
-				setoresOverlay.resetStyle(layer);
+			setoresComerciaisOverlay.eachLayer(function(layer){
+				setoresComerciaisOverlay.resetStyle(layer);
 			});
 		});
 
@@ -244,7 +255,7 @@ $(function(){
 		}
 
 		function resetHighlight(e) {
-			setoresOverlay.resetStyle(e.target);
+			setoresComerciaisOverlay.resetStyle(e.target);
 			info.update();
 		}
 
