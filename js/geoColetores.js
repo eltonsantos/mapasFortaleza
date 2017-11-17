@@ -1,4 +1,4 @@
-{
+coletores={
   "type": "FeatureCollection",
   "totalFeatures": 2,
   "features": [

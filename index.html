@@ -91,10 +91,24 @@
 			<button id="btnLocate" class="btn btn-primary btn-block">Locate</button>
 			<br />
 
-			<div>
+			<div class="buscaContainer">
 				<b>Buscar por Setor Comercial:</b>
 				<div id="buscar" class="form-control"></div>
+
+				<div id="divFilterBUOWL" class="col-xs-12">
+                    <div class="col-xs-4">
+                        <input type='radio' name='fltBUOWL' value='ALL' checked>All
+                    </div>
+                    <div class="col-xs-4">
+                        <input type='radio' name='fltBUOWL' value='Yes'>aa
+                    </div>
+                    <div class="col-xs-4">
+                        <input type='radio' name='fltBUOWL' value='Undetermined'>bb
+                    </div>
+                </div>
+
 			</div>
+
 			<br />
 
 			<h5><b>Nível do zoom:</b> <span id="zoom-level"></span></h5>
@@ -122,8 +136,12 @@
 	    <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
 	    <!-- Leaflet -->
 		<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
-		<!-- Arquivo JSON -->
-		<script type="text/javascript" src="js/geoserver.js"></script>
+		<!-- Arquivo JSON Setores Comerciais -->
+		<script type="text/javascript" src="js/geoSetoresComerciais.js"></script>
+		<!-- Arquivo JSON Hidrantes -->
+		<script type="text/javascript" src="js/geoHidrantes.js"></script>
+		<!-- Arquivo JSON Coletores -->
+		<script type="text/javascript" src="js/geoColetores.js"></script>
 		<!-- Plugin leaftlet search -->
 		<script type="text/javascript" src="js/leaflet-search.min.js"></script>
 		<!-- Plugin Opacity -->
@@ -142,6 +160,8 @@
 		<script type="text/javascript" src="js/leaflet-providers.js"></script>
 		<!-- Plugin MousePosition -->
 	    <script type="text/javascript" src="js/L.Control.MousePosition.js"></script>
+		<!-- Script Hidrantes -->
+		<!--<script type="text/javascript" src="js/scriptHidrantes.js"></script>-->
 		<!-- Script da página -->
 		<script type="text/javascript" src="js/script.js"></script>
 

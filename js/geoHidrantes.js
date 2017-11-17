@@ -1,4 +1,4 @@
-{
+hidrantes={
   "type": "FeatureCollection",
   "totalFeatures": 246,
   "features": [
