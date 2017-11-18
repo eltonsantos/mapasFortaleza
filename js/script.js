@@ -11,7 +11,9 @@ var setoresComerciaisOverlay;
 var hidrantesOverlay;
 var redesAguaOverlay;
 var legend;
-var layer;
+var layerStComerciais;
+var layerRedesAgua;
+var layerHidrantes;
 var div;
 var grade;
 var labels;
@@ -24,7 +26,9 @@ var buttonHome;
 var escala;
 var pan;
 var medida;
-var popupConteudo;
+var popupConteudoStComerciais;
+var popupConteudoRedesAgua;
+var popupConteudoHidrantes;
 var zoomBar;
 var posicaoMouse;
 
@@ -71,7 +75,7 @@ $(function(){
 			style: function (feature) {
 				return feature.properties && feature.properties.style;
 			},
-			onEachFeature: onEachFeature,
+			onEachFeature: onEachFeature_redesAgua,
 			pointToLayer: function (feature, latlng) {
 				return L.circleMarker(latlng, {
 					radius: 8,
@@ -86,14 +90,13 @@ $(function(){
 
 
 		hidrantesOverlay = L.geoJSON(hidrantes, {
-			filter: function (feature, layer) {
+			filter: function (feature, layerHidrantes) {
 				if (feature.properties) {
-					// If the property "underConstruction" exists and is true, return false (don't render features under construction)
 					return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
 				}
 				return false;
 			},
-			onEachFeature: onEachFeature
+			onEachFeature: onEachFeature_hidrantes
 		}).addTo(map);
 
 
@@ -238,9 +241,9 @@ $(function(){
 		}
 
 		function highlightFeature(e) {
-			layer = e.target;
+			layerStComerciais = e.target;
 
-			layer.setStyle({
+			layerStComerciais.setStyle({
 				weight: 5,
 				color: '#666',
 				dashArray: '',
@@ -248,10 +251,10 @@ $(function(){
 			});
 
 			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-				layer.bringToFront();
+				layerStComerciais.bringToFront();
 			}
 
-			info.update(layer.feature.properties);
+			info.update(layerStComerciais.feature.properties);
 		}
 
 		function resetHighlight(e) {
@@ -263,16 +266,16 @@ $(function(){
 			map.fitBounds(e.target.getBounds());
 		}
 
-		function onEachFeature(feature, layer) {
-			popupConteudo = "<b>Setor Comercial: " + feature.properties.sco_num_sc + "</b><br /><b>Localidade:</b> " + feature.properties.sco_dsc_loc + "<br /><b>UN:</b> " + feature.properties.sco_dsc_un + "<br /><b>Set. de Abast.:</b> " + feature.properties.sco_dsc_sa + "<br /><b>Código do Set. de Abast.:</b> " + feature.properties.sco_cod_sa;
+		function onEachFeature(feature, layerStComerciais) {
+			popupConteudoStComerciais = "<b>Setor Comercial: " + feature.properties.sco_num_sc + "</b><br /><b>Localidade:</b> " + feature.properties.sco_dsc_loc + "<br /><b>UN:</b> " + feature.properties.sco_dsc_un + "<br /><b>Set. de Abast.:</b> " + feature.properties.sco_dsc_sa + "<br /><b>Código do Set. de Abast.:</b> " + feature.properties.sco_cod_sa;
 
-			if (feature.properties && feature.properties.popupConteudo) {
-				popupConteudo += feature.properties.popupConteudo;
+			if (feature.properties && feature.properties.popupConteudoStComerciais) {
+				popupConteudoStComerciais += feature.properties.popupConteudoStComerciais;
 			}
 			
-			layer.bindPopup(popupConteudo);
+			layerStComerciais.bindPopup(popupConteudoStComerciais);
 
-			layer.on({
+			layerStComerciais.on({
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
 				click: zoomToFeature
@@ -287,10 +290,36 @@ $(function(){
 
 	/***************************************************************************/
 		
-	// ****************** FUNÇÕES COLETORES
+	// ****************** FUNÇÕES REDES DE ÁGUA
+		function onEachFeature_redesAgua(feature, layerRedesAgua) {
+			popupConteudoRedesAgua = "<b>Tipo de Rede: " + feature.properties.tra_tipo_rede + "</b><br /><b>Data de Cadastro:</b> " + feature.properties.data_cadastro + "<br /><b>Data de Atualização:</b> " + feature.properties.data_atualizacao + "<br /><b>Extensão Calculada:</b> " + feature.properties.extensao_calculada;
+
+			if (feature.properties && feature.properties.popupConteudoRedesAgua) {
+				popupConteudoRedesAgua += feature.properties.popupConteudoRedesAgua;
+			}
+			
+			layerRedesAgua.bindPopup(popupConteudoRedesAgua);
+
+			/*layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				click: zoomToFeature
+			});*/
+
+		}
 	/***************************************************************************/
 
 	// ****************** FUNÇÕES HIDRANTES
+		function onEachFeature_hidrantes(feature, layerHidrantes) {
+			popupConteudoHidrantes = "<b>Setor de Abastecimento: " + feature.properties.setor_abastecimento + "</b><br /><b>Endereço:</b> " + feature.properties.endereco + "<br /><b>UN:</b> " + feature.properties.unidade_negocio + "<br /><b>Entre Ruas:</b> " + feature.properties.entre_ruas + "<br /><b>Quadrícula:</b> " + feature.properties.quadricula + "<br /><b>Bairro:</b> " + feature.properties.bairro + "<br /><b>Observações:</b> " + feature.properties.observacoes;
+
+			if (feature.properties && feature.properties.popupConteudoHidrantes) {
+				popupConteudoHidrantes += feature.properties.popupConteudoHidrantes;
+			}
+			
+			layerHidrantes.bindPopup(popupConteudoHidrantes);
+
+		}
 	/***************************************************************************/
 
 	// ****************** OUTRAS FUNÇÕES
