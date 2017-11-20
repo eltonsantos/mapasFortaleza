@@ -66,8 +66,8 @@ $(function(){
 
 		// Overlayer
 		setoresComerciaisOverlay = L.geoJson(setoresComerciais, {
-			style: style,
-			onEachFeature: onEachFeature
+			style: style_stComerciais,
+			onEachFeature: onEachFeature_stComerciais
 		}).addTo(map);
 
 
@@ -207,7 +207,7 @@ $(function(){
 				to = grades[i + 1];
 
 				labels.push(
-					'<i style="background:' + getColor(from + 1) + '"></i> ' +
+					'<i style="background:' + getColor_stComerciais(from + 1) + '"></i> ' +
 					from + (to ? '&ndash;' + to : '+'));
 			}
 
@@ -218,7 +218,7 @@ $(function(){
 		legend.addTo(map);	
 
 		// pega cor de acordo com a condição estabelecida
-		function getColor(d) {
+		function getColor_stComerciais(d) {
 			return  d > 70 ? '#800026' :
 					d > 60 ? '#BD0026' :
 					d > 50 ? '#E31A1C' :
@@ -229,18 +229,18 @@ $(function(){
 							 '#FFEDA0' ;
 		}
 
-		function style(feature) {
+		function style_stComerciais(feature) {
 			return {
 				weight: 2,
 				opacity: 1,
 				color: 'white',
 				dashArray: '3',
 				fillOpacity: 0.7,
-				fillColor: getColor(feature.properties.sco_num_sc)
+				fillColor: getColor_stComerciais(feature.properties.sco_num_sc)
 			};
 		}
 
-		function highlightFeature(e) {
+		function highlightFeature_stComerciais(e) {
 			layerStComerciais = e.target;
 
 			layerStComerciais.setStyle({
@@ -257,16 +257,16 @@ $(function(){
 			info.update(layerStComerciais.feature.properties);
 		}
 
-		function resetHighlight(e) {
+		function resetHighlight_stComerciais(e) {
 			setoresComerciaisOverlay.resetStyle(e.target);
 			info.update();
 		}
 
-		function zoomToFeature(e) {
+		function zoomToFeature_stComerciais(e) {
 			map.fitBounds(e.target.getBounds());
 		}
 
-		function onEachFeature(feature, layerStComerciais) {
+		function onEachFeature_stComerciais(feature, layerStComerciais) {
 			popupConteudoStComerciais = "<b>Setor Comercial: " + feature.properties.sco_num_sc + "</b><br /><b>Localidade:</b> " + feature.properties.sco_dsc_loc + "<br /><b>UN:</b> " + feature.properties.sco_dsc_un + "<br /><b>Set. de Abast.:</b> " + feature.properties.sco_dsc_sa + "<br /><b>Código do Set. de Abast.:</b> " + feature.properties.sco_cod_sa;
 
 			if (feature.properties && feature.properties.popupConteudoStComerciais) {
@@ -276,9 +276,9 @@ $(function(){
 			layerStComerciais.bindPopup(popupConteudoStComerciais);
 
 			layerStComerciais.on({
-				mouseover: highlightFeature,
-				mouseout: resetHighlight,
-				click: zoomToFeature
+				mouseover: highlightFeature_stComerciais,
+				mouseout: resetHighlight_stComerciais,
+				click: zoomToFeature_stComerciais
 			});
 
 		}
