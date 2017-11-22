@@ -101,7 +101,19 @@ input.search-input {
 	display: none;
 }
 
-.buscaContainer {
+.scContainer {
+	background-color: #ffffb3;
+	min-height: 90px;
+	padding: 5px;
+}
+
+.raContainer {
+	background-color: #ffffb3;
+	min-height: 90px;
+	padding: 5px;
+}
+
+.hiContainer {
 	background-color: #ffffb3;
 	min-height: 90px;
 	padding: 5px;

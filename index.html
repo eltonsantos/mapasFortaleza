@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
 		<!-- Jquery UI -->
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.3.custom.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css" />
 		<!-- Leaflet -->
 	    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
 	    <!-- Bootstrap -->
@@ -91,22 +91,19 @@
 			<button id="btnLocate" class="btn btn-primary btn-block">Locate</button>
 			<br />
 
-			<div class="buscaContainer">
+			<div class="scContainer">
 				<b>Buscar por Setor Comercial:</b>
-				<div id="buscar" class="form-control"></div>
+				<input id="scBusca" class="form-control" />
+			</div>
 
-				<div id="divFilterBUOWL" class="col-xs-12">
-                    <div class="col-xs-4">
-                        <input type='radio' name='fltBUOWL' value='ALL' checked>All
-                    </div>
-                    <div class="col-xs-4">
-                        <input type='radio' name='fltBUOWL' value='Yes'>aa
-                    </div>
-                    <div class="col-xs-4">
-                        <input type='radio' name='fltBUOWL' value='Undetermined'>bb
-                    </div>
-                </div>
+			<div class="raContainer">
+				<b>Buscar por Rede de Água:</b>
+				<input id="raBusca" class="form-control" />
+			</div>
 
+			<div class="scContainer">
+				<b>Buscar por Hidrante:</b>
+				<input id="hiBusca" class="form-control" />
 			</div>
 
 			<br />
@@ -131,9 +128,9 @@
 		</div>
 
 		<!-- Jquery -->
-	    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+	    <script type="text/javascript" src="js/jquery.min.js"></script>
 	    <!-- Jquery UI -->
-	    <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+	    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 	    <!-- Leaflet -->
 		<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
 		<!-- Arquivo JSON Setores Comerciais -->

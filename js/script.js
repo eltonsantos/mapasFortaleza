@@ -65,54 +65,59 @@ $(function(){
 		map.addLayer(camadaMapa);
 
 		// Overlayer
-		setoresComerciaisOverlay = L.geoJson(setoresComerciais, {
-			style: style_stComerciais,
-			onEachFeature: onEachFeature_stComerciais
-		}).addTo(map);
+
+			/** ST COMERCIAIS */
+			setoresComerciaisOverlay = L.geoJson(setoresComerciais, {
+				style: style_stComerciais,
+				onEachFeature: onEachFeature_stComerciais
+			}).addTo(map);
 
 
-		redesAguaOverlay = L.geoJson(rede_agua, {
-			style: function (feature) {
-				return feature.properties && feature.properties.style;
-			},
-			onEachFeature: onEachFeature_redesAgua,
-			pointToLayer: function (feature, latlng) {
-				return L.circleMarker(latlng, {
-					radius: 8,
-					fillColor: "#ff7800",
-					color: "#000",
-					weight: 1,
-					opacity: 1,
-					fillOpacity: 0.8
-				});
-			}
-		}).addTo(map);
-
-
-		hidrantesOverlay = L.geoJSON(hidrantes, {
-			filter: function (feature, layerHidrantes) {
-				if (feature.properties) {
-					return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
+			/** REDE DE ÁGUA */
+			redesAguaOverlay = L.geoJson(rede_agua, {
+				style: function (feature) {
+					return feature.properties && feature.properties.style;
+				},
+				onEachFeature: onEachFeature_redesAgua,
+				pointToLayer: function (feature, latlng) {
+					return L.circleMarker(latlng, {
+						radius: 8,
+						fillColor: "#ff7800",
+						color: "#000",
+						weight: 1,
+						opacity: 1,
+						fillOpacity: 0.8
+					});
 				}
-				return false;
-			},
-			onEachFeature: onEachFeature_hidrantes
-		}).addTo(map);
+			}).addTo(map);
 
 
-		objBasemaps = {
-			"Mapa tradicional": camadaMapa,
-			"OpenTopoMap": camadaTopo,
-			"Satélite": camadaImagery
-		};
+			/** HIDRANTES */
+			hidrantesOverlay = L.geoJSON(hidrantes, {
+				filter: function (feature, layerHidrantes) {
+					if (feature.properties) {
+						return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
+					}
+					return false;
+				},
+				onEachFeature: onEachFeature_hidrantes
+			}).addTo(map);
 
-		objSobrecamadas = {
-			'Setores Comerciais': setoresComerciaisOverlay,
-			'Redes de Água': redesAguaOverlay,
-			'Hidrantes': hidrantesOverlay
-		};
 
-		controleCamadas = L.control.layers(objBasemaps, objSobrecamadas).addTo(map);
+			/** OVERLAYERS */
+			objBasemaps = {
+				"Mapa tradicional": camadaMapa,
+				"OpenTopoMap": camadaTopo,
+				"Satélite": camadaImagery
+			};
+
+			objSobrecamadas = {
+				'Setores Comerciais': setoresComerciaisOverlay,
+				'Redes de Água': redesAguaOverlay,
+				'Hidrantes': hidrantesOverlay
+			};
+
+			controleCamadas = L.control.layers(objBasemaps, objSobrecamadas).addTo(map);
 
 		// Mostra os controles	
 		pan = L.control.pan({
@@ -141,11 +146,12 @@ $(function(){
 		// 	OPACIDADE
 		$('#sldOpacity').on('change', function(){
 			$('#image-opacity').html(this.value);
-			console.log(typeof(setoresComerciaisOverlay));
+			//console.log(typeof(setoresComerciaisOverlay));
 			setoresComerciaisOverlay.setStyle({ opacity: this.value, fillOpacity: this.value})	
 		});
 
 		// BUSCA
+		/*
 		searchControl = new L.Control.Search({
 			container: 'buscar',
 			layer: setoresComerciaisOverlay,
@@ -172,7 +178,7 @@ $(function(){
 		});
 
 		map.addControl(searchControl);
-
+		*/
 	/***************************************************************************/
 
 	// ****************** FUNÇÕES SETORES COMERCIAIS
@@ -283,6 +289,19 @@ $(function(){
 
 		}
 
+		$("#scBusca").autocomplete({
+			source: setoresComerciais.features.map(function(d, i){
+				return { 
+					label: d.properties.sco_num_sc + " - " + d.properties.sco_dsc_loc,
+					id: i
+				}
+			}),
+			select: function(event, ui){
+				var featureLayer = L.geoJSON(setoresComerciais.features[ui.item.id]);
+				map.fitBounds(featureLayer.getBounds());				
+			} 
+		});
+
 		// Retornar um valor composto na busca
 		function SearchControlToArrayString(sc){
 			return sc.sco_num_sc + " - " + sc.sco_dsc_loc + " - " + sc.sco_dsc_un;
@@ -307,6 +326,19 @@ $(function(){
 			});*/
 
 		}
+
+		$("#raBusca").autocomplete({
+			source: rede_agua.features.map(function(d, i){
+				return { 
+					label: d.properties.data_cadastro + " - " + d.properties.tra_tipo_rede,
+					id: i
+				}
+			}),
+			select: function(event, ui){
+				var featureLayer = L.geoJSON(rede_agua.features[ui.item.id]);
+				map.fitBounds(featureLayer.getBounds());				
+			} 
+		});
 	/***************************************************************************/
 
 	// ****************** FUNÇÕES HIDRANTES
@@ -320,6 +352,19 @@ $(function(){
 			layerHidrantes.bindPopup(popupConteudoHidrantes);
 
 		}
+
+		$("#hiBusca").autocomplete({
+			source: hidrantes.features.map(function(d, i){
+				return { 
+					label: d.properties.setor_abastecimento + " - " + d.properties.bairro,
+					id: i
+				}
+			}),
+			select: function(event, ui){
+				var featureLayer = L.geoJSON(hidrantes.features[ui.item.id]);
+				map.fitBounds(featureLayer.getBounds());				
+			} 
+		});
 	/***************************************************************************/
 
 	// ****************** OUTRAS FUNÇÕES
