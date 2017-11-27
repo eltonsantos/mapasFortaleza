@@ -126,6 +126,13 @@ input.search-input {
 
 
 @media print {
+
+	#map {
+		width: 970px;
+		height: 550px;
+		margin: 0 auto;
+		margin-top: 100px;
+	}
 	.no-print, .no-print * {
 		display: none !important;
 	}
