@@ -1,8 +1,13 @@
 // Variáveis
 var map;
 var camadaMapa;
+var camadaMapa2;
 var camadaTopo;
 var camadaImagery;
+var googleTerrain;
+var googleStreet;
+var googleHybrid;
+var googleSatellite;
 var controleCamadas;
 var objBasemaps;
 var objSobrecamadas;
@@ -15,22 +20,21 @@ var layerStComerciais;
 var layerRedesAgua;
 var layerHidrantes;
 var div;
-var grade;
+var grades;
 var labels;
 var from;
 var to;
-var searchControl;
-var zoomSearch;
+var ctlZoomslider;
 var opacidade;
-var buttonHome;
 var escala;
-var pan;
+var ctlPan;
 var medida;
 var popupConteudoStComerciais;
 var popupConteudoRedesAgua;
 var popupConteudoHidrantes;
 var zoomBar;
 var posicaoMouse;
+var ctlMinimap;
 
 $(function(){
 	
@@ -38,7 +42,7 @@ $(function(){
 		map = L.map('map', {
 			center: [-3.794, -38.545],
 			zoom: 12,
-			maxZoom: 18,
+			maxZoom: 20,
 			minZoom: 7,
 			zoomControl: false
 		});
@@ -61,6 +65,26 @@ $(function(){
 		});
 
 		camadaImagery = L.tileLayer.provider('Esri.WorldImagery');
+
+		googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+		    maxZoom: 20,
+		    subdomains:['mt0','mt1','mt2','mt3']
+		});
+		
+		googleStreet = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+		    maxZoom: 20,
+		    subdomains:['mt0','mt1','mt2','mt3']
+		});
+
+		googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+		    maxZoom: 20,
+		    subdomains:['mt0','mt1','mt2','mt3']
+		});
+
+		googleSatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+		    maxZoom: 20,
+		    subdomains:['mt0','mt1','mt2','mt3']
+		});
 
 		map.addLayer(camadaMapa);
 
@@ -108,7 +132,11 @@ $(function(){
 			objBasemaps = {
 				"Mapa tradicional": camadaMapa,
 				"OpenTopoMap": camadaTopo,
-				"Satélite": camadaImagery
+				"Satélite": camadaImagery,
+				"Google (Terreno)": googleTerrain, 
+				"Google (Ruas)": googleStreet,
+				"Google (Híbrido)": googleHybrid,
+				"Google (Satélite)": googleSatellite
 			};
 
 			objSobrecamadas = {
@@ -119,8 +147,11 @@ $(function(){
 
 			controleCamadas = L.control.layers(objBasemaps, objSobrecamadas).addTo(map);
 
-		// Mostra os controles	
-		pan = L.control.pan({
+		// Mostra o slide do zoom
+		//ctlZoomslider = L.control.zoomslider().addTo(map);
+
+		// Mostra os controles
+		ctlPan = L.control.pan({
 			position: 'topleft'
 		}).addTo(map);
 
@@ -140,7 +171,7 @@ $(function(){
 			showMeasurementsClearControl: true
 		}).addTo(map);
 
-		// Mostrar zoom
+		// Mostrar o botão do zoom
 		zoomBar = new L.Control.ZoomBar().addTo(map);
 
 		// 	OPACIDADE
@@ -150,35 +181,15 @@ $(function(){
 			setoresComerciaisOverlay.setStyle({ opacity: this.value, fillOpacity: this.value})	
 		});
 
-		// BUSCA
-		/*
-		searchControl = new L.Control.Search({
-			container: 'buscar',
-			layer: setoresComerciaisOverlay,
-			propertyName: 'sco_dsc_sa',
-			marker: false,
-			moveToLocation: function(latlng, title, map){
-				zoomSearch = map.getBoundsZoom(latlng.layer.getBounds());
-				map.setView(latlng, zoomSearch);
-			}
+		// MiniMap
+		camadaMapa2 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			zoomControl: false
 		});
 
-		searchControl.on('search:locationfound', function(e){
-			e.layer.setStyle({
-				weight: 7,
-				color:'#f90'
-			});
-			if (e.layer._popup){
-				e.layer.openPopup();
-			}
-		}).on('search:collapsed', function(e){
-			setoresComerciaisOverlay.eachLayer(function(layer){
-				setoresComerciaisOverlay.resetStyle(layer);
-			});
-		});
+		ctlMinimap = new L.Control.MiniMap(camadaMapa2, {
+			toggleDisplay: true
+		}).addTo(map);
 
-		map.addControl(searchControl);
-		*/
 	/***************************************************************************/
 
 	// ****************** FUNÇÕES SETORES COMERCIAIS
@@ -301,11 +312,46 @@ $(function(){
 				map.fitBounds(featureLayer.getBounds());				
 			} 
 		});
+/*
+		$("#scBuscaUnidade").autocomplete({
+			source: setoresComerciais.features.map(function(d, i){
+				return { 
+					label: d.properties.sco_dsc_un,
+					id: i
+				}
+			}),
+			select: function(event, ui){
+				var featureLayer = L.geoJSON(setoresComerciais.features[ui.item.id]);
+				map.fitBounds(featureLayer.getBounds());				
+			} 
+		});
 
-		// Retornar um valor composto na busca
-		function SearchControlToArrayString(sc){
-			return sc.sco_num_sc + " - " + sc.sco_dsc_loc + " - " + sc.sco_dsc_un;
-		}
+		$("#scBuscaLocalidade").autocomplete({
+			source: setoresComerciais.features.map(function(d, i){
+				return { 
+					label: d.properties.sco_dsc_loc,
+					id: i
+				}
+			}),
+			select: function(event, ui){
+				var featureLayer = L.geoJSON(setoresComerciais.features[ui.item.id]);
+				map.fitBounds(featureLayer.getBounds());				
+			} 
+		});
+
+		$("#scBuscaNumSetor").autocomplete({
+			source: setoresComerciais.features.map(function(d, i){
+				return { 
+					label: d.properties.sco_num_sc,
+					id: i
+				}
+			}),
+			select: function(event, ui){
+				var featureLayer = L.geoJSON(setoresComerciais.features[ui.item.id]);
+				map.fitBounds(featureLayer.getBounds());				
+			} 
+		});
+*/
 
 	/***************************************************************************/
 		
@@ -374,3 +420,7 @@ $(function(){
 	/***************************************************************************/
 
 });
+
+function imprimirMapa() {
+	window.print();
+}

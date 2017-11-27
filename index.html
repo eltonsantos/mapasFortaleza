@@ -22,19 +22,21 @@
 	    <!-- Plugin PanControl -->
 	    <link rel="stylesheet" type="text/css" href="css/L.Control.Pan.css" />
 	    <!-- Plugin ZoomSlider -->
-	    <link rel="stylesheet" type="text/css" href="css/L.Control.Zoomslider.css" />
+	    <!--<link rel="stylesheet" type="text/css" href="css/L.Control.Zoomslider.css" />-->
 	    <!-- Plugin ZoomSlider -->
 	    <link rel="stylesheet" type="text/css" href="css/L.Control.ZoomBar.css" />
 	    <!-- Plugin PolylineMeasure -->
 	    <link rel="stylesheet" type="text/css" href="css/Leaflet.PolylineMeasure.css" />
 	    <!-- Plugin MousePosition -->
 	    <link rel="stylesheet" type="text/css" href="css/L.Control.MousePosition.css" />
+	    <!-- Plugin MiniMap -->
+	    <link rel="stylesheet" type="text/css" href="css/Control.MiniMap.css" />
 	    <!-- -Estilo da página -->
 	    <link rel="stylesheet" type="text/css" href="css/estilo.css" />
 	</head>
 	<body>
 
-		<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+		<header class="navbar navbar-static-top bs-docs-nav no-print" id="top" role="banner">
 
 	        <h1 class="sr-only">Cagece | Mapas Fortaleza e Região Metropolitana</h1>        
 
@@ -56,7 +58,7 @@
             </div>
 
             <ul class="nav navbar-nav navbar-icons">
-            	<li class="text-center">
+            	<li class="text-center" onclick="imprimirMapa()">
             		<a href="#">
 	            		<span class="fa fa-print"></span>
 	            	
@@ -83,9 +85,9 @@
 
 		</header>
 
-	    <div class="retGreen"></div>
+	    <div class="retGreen no-print"></div>
 
-		<div class="col-md-2">
+		<div class="col-md-2 no-print">
 			
 			<br />
 			<button id="btnLocate" class="btn btn-primary btn-block">Locate</button>
@@ -93,17 +95,22 @@
 
 			<div class="scContainer">
 				<b>Buscar por Setor Comercial:</b>
-				<input id="scBusca" class="form-control" />
+				<input id="scBusca" class="form-control"  placeholder="Buscar por setor comercial" />
+				<!--
+				<input id="scBuscaUnidade" class="form-control"  placeholder="Buscar por unidade" />
+				<input id="scBuscaLocalidade" class="form-control"  placeholder="Buscar por localidade" />
+				<input id="scBuscaNumSetor" class="form-control"  placeholder="Buscar por número do Setor" />
+				-->
 			</div>
 
 			<div class="raContainer">
 				<b>Buscar por Rede de Água:</b>
-				<input id="raBusca" class="form-control" />
+				<input id="raBusca" class="form-control" placeholder="Buscar por rede de água" />
 			</div>
 
 			<div class="scContainer">
 				<b>Buscar por Hidrante:</b>
-				<input id="hiBusca" class="form-control" />
+				<input id="hiBusca" class="form-control" placeholder="Buscar por hidrante" />
 			</div>
 
 			<br />
@@ -148,7 +155,7 @@
 		<!-- Plugin PanControl -->
 		<script type="text/javascript" src="js/L.Control.Pan.js" ></script> 
 		<!-- Plugin ZoomSlider -->
-		<script type="text/javascript" src="js/L.Control.Zoomslider.js"></script>
+		<!--<script type="text/javascript" src="js/L.Control.Zoomslider.js"></script>-->
 		<!-- Plugin ZoomSlider -->
 		<script type="text/javascript" src="js/L.Control.ZoomBar.js"></script>
 		<!-- Plugin PolylineMeasure -->
@@ -157,6 +164,8 @@
 		<script type="text/javascript" src="js/leaflet-providers.js"></script>
 		<!-- Plugin MousePosition -->
 	    <script type="text/javascript" src="js/L.Control.MousePosition.js"></script>
+	    <!-- Plugin MiniMap -->
+	    <script type="text/javascript" src="js/Control.MiniMap.js"></script>
 		<!-- Script da página -->
 		<script type="text/javascript" src="js/script.js"></script>
 
