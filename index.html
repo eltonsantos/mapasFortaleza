@@ -31,6 +31,8 @@
 	    <link rel="stylesheet" type="text/css" href="css/L.Control.MousePosition.css" />
 	    <!-- Plugin MiniMap -->
 	    <link rel="stylesheet" type="text/css" href="css/Control.MiniMap.css" />
+	    <!-- Plugin OpenCageSearch -->
+	    <link rel="stylesheet" type="text/css" href="css/L.Control.OpenCageSearch.css" />
 	    <!-- -Estilo da página -->
 	    <link rel="stylesheet" type="text/css" href="css/estilo.css" />
 	</head>
@@ -60,8 +62,7 @@
             <ul class="nav navbar-nav navbar-icons">
             	<li class="text-center" onclick="imprimirMapa()">
             		<a href="#">
-	            		<span class="fa fa-print"></span>
-	            	
+	            		<span class="fa fa-print"></span>            	
 	            		<small>Imprimir</small>
             		</a>
             	</li>
@@ -69,15 +70,13 @@
             	<li class="text-center">
             		<a href="#">
 	            		<span class="fa fa-download"></span>
-	            	
 	            		<small>Download</small>
             		</a>
             	</li>
 
             	<li class="text-center">
             		<a href="#">
-	            		<span class="fa fa-question-circle"></span>
-	            
+	            		<span class="fa fa-question-circle"></span>    
 	            		<small>Ajuda</small>
             		</a>
             	</li>
@@ -92,6 +91,11 @@
 			<br />
 			<button id="btnLocate" class="btn btn-primary btn-block">Locate</button>
 			<br />
+
+			<div class="buscaContainer">
+				<b>Buscar por rua:</b>
+				<input id="ruaBusca" class="form-control"  placeholder="Buscar por rua" />
+			</div>
 
 			<div class="scContainer">
 				<b>Buscar por Setor Comercial:</b>
@@ -129,6 +133,12 @@
 		</div>
 
 		<div class="col-md-10">
+			<div class="PrintApenas">
+				<img id="printLogo" src="images/cagece.png" />
+			</div>
+			<div class="PrintApenas">
+				<img id="setaNorte" src="images/seta-norte.svg" />
+			</div>
 			<div class="row">
 				<div id='map'></div>
 			</div>
@@ -166,6 +176,8 @@
 	    <script type="text/javascript" src="js/L.Control.MousePosition.js"></script>
 	    <!-- Plugin MiniMap -->
 	    <script type="text/javascript" src="js/Control.MiniMap.js"></script>
+	    <!-- Plugin OpenCageSearch -->
+	    <script type="text/javascript" src="js/L.Control.OpenCageSearch.js"></script>
 		<!-- Script da página -->
 		<script type="text/javascript" src="js/script.js"></script>
 

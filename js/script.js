@@ -35,6 +35,7 @@ var popupConteudoHidrantes;
 var zoomBar;
 var posicaoMouse;
 var ctlMinimap;
+var ctlSearch;
 
 $(function(){
 	
@@ -188,6 +189,27 @@ $(function(){
 
 		ctlMinimap = new L.Control.MiniMap(camadaMapa2, {
 			toggleDisplay: true
+		}).addTo(map);
+
+		// Mostrar norte
+		var setaNorte = L.control({
+			position: "topright"
+		});
+		setaNorte.onAdd = function(map) {
+		    var divi = L.DomUtil.create("div", "info legend");
+		    divi.innerHTML = '<img src="images/seta-norte.svg" width="48" height="48" />';
+		    return divi;
+		}
+		setaNorte.addTo(map);
+
+		// BUSCAR POR RUAS
+		ctlSearch = L.Control.openCageSearch({
+			position: 'topleft',
+			placeholder: 'Buscar por ruas...',
+			errorMessage: 'Nenhuma localidade encontrada',
+			showResultIcons: false,
+			key: '3c38d15e76c02545181b07d3f8cfccf0',
+			limit: 5
 		}).addTo(map);
 
 	/***************************************************************************/
