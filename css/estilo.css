@@ -169,8 +169,7 @@ input.search-input {
 		z-index: 9999;
 	}
 
-
-	.leaflet-control-pan, .leaflet-bar, .leaflet-control-layers, .info, .leaflet-control-mouseposition, .leaflet-control-minimap, .leaflet-control-attribution {
+	.leaflet-control-pan, .leaflet-bar, .leaflet-control-layers, .info, .leaflet-control-mouseposition, .leaflet-control-minimap, .leaflet-control-attribution, .leaflet-control-ocd-search {
 		display: none;
 	}
 

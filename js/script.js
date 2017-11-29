@@ -93,7 +93,12 @@ $(function(){
 
 			/** ST COMERCIAIS */
 			setoresComerciaisOverlay = L.geoJson(setoresComerciais, {
-				style: style_stComerciais,
+				style: function(feature){
+					return {
+						color: "#1B6D9F",
+						fillColor: "#5fb5e6"
+					};
+				},
 				onEachFeature: onEachFeature_stComerciais
 			}).addTo(map);
 
@@ -103,17 +108,7 @@ $(function(){
 				style: function (feature) {
 					return feature.properties && feature.properties.style;
 				},
-				onEachFeature: onEachFeature_redesAgua,
-				pointToLayer: function (feature, latlng) {
-					return L.circleMarker(latlng, {
-						radius: 8,
-						fillColor: "#ff7800",
-						color: "#000",
-						weight: 1,
-						opacity: 1,
-						fillOpacity: 0.8
-					});
-				}
+				onEachFeature: onEachFeature_redesAgua
 			}).addTo(map);
 
 
@@ -125,7 +120,18 @@ $(function(){
 					}
 					return false;
 				},
-				onEachFeature: onEachFeature_hidrantes
+				onEachFeature: onEachFeature_hidrantes,
+
+				pointToLayer: function (feature, latlng) {
+					return L.marker(latlng, {
+						icon: L.AwesomeMarkers.icon({
+						    icon: 'tint',
+						    markerColor: 'blue',
+						    prefix: 'fa',
+						    extraClasses: 'someClass'
+						})
+					});
+				}
 			}).addTo(map);
 
 
@@ -179,7 +185,7 @@ $(function(){
 		$('#sldOpacity').on('change', function(){
 			$('#image-opacity').html(this.value);
 			//console.log(typeof(setoresComerciaisOverlay));
-			setoresComerciaisOverlay.setStyle({ opacity: this.value, fillOpacity: this.value})	
+			setoresComerciaisOverlay.setStyle({ fillOpacity: this.value })	
 		});
 
 		// MiniMap
@@ -254,7 +260,7 @@ $(function(){
 			return div;
 		};
 
-		legend.addTo(map);	
+		//legend.addTo(map);
 
 		// pega cor de acordo com a condição estabelecida
 		function getColor_stComerciais(d) {
@@ -274,21 +280,19 @@ $(function(){
 				opacity: 1,
 				color: 'white',
 				dashArray: '3',
-				fillOpacity: 0.7,
 				fillColor: getColor_stComerciais(feature.properties.sco_num_sc)
 			};
 		}
 
 		function highlightFeature_stComerciais(e) {
 			layerStComerciais = e.target;
-
+			
 			layerStComerciais.setStyle({
 				weight: 5,
 				color: '#666',
-				dashArray: '',
-				fillOpacity: 0.7
+				dashArray: ''
 			});
-
+			
 			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
 				layerStComerciais.bringToFront();
 			}
@@ -410,6 +414,10 @@ $(function(){
 	/***************************************************************************/
 
 	// ****************** FUNÇÕES HIDRANTES
+		function zoomToFeature_hidrantes(e) {
+			map.setView(e.latlng, 13);
+		}
+
 		function onEachFeature_hidrantes(feature, layerHidrantes) {
 			popupConteudoHidrantes = "<b>Setor de Abastecimento: " + feature.properties.setor_abastecimento + "</b><br /><b>Endereço:</b> " + feature.properties.endereco + "<br /><b>UN:</b> " + feature.properties.unidade_negocio + "<br /><b>Entre Ruas:</b> " + feature.properties.entre_ruas + "<br /><b>Quadrícula:</b> " + feature.properties.quadricula + "<br /><b>Bairro:</b> " + feature.properties.bairro + "<br /><b>Observações:</b> " + feature.properties.observacoes;
 
@@ -417,7 +425,14 @@ $(function(){
 				popupConteudoHidrantes += feature.properties.popupConteudoHidrantes;
 			}
 			
+			/*layerHidrantes.bindPopup(popupConteudoHidrantes).on('click', function(e){
+				 map.setView(e.latlng, 13);
+			});*/
 			layerHidrantes.bindPopup(popupConteudoHidrantes);
+
+			layerHidrantes.on({
+				click: zoomToFeature_hidrantes
+			});
 
 		}
 
