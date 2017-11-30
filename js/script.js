@@ -128,7 +128,7 @@ $(function(){
 						    icon: 'tint',
 						    markerColor: 'blue',
 						    prefix: 'fa',
-						    extraClasses: 'someClass'
+						    extraClasses: 'someClass	'
 						})
 					});
 				}
