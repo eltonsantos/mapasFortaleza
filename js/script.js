@@ -36,6 +36,7 @@ var zoomBar;
 var posicaoMouse;
 var ctlMinimap;
 var ctlSearch;
+var ctlPrint;
 
 $(function(){
 	
@@ -217,6 +218,17 @@ $(function(){
 			key: '3c38d15e76c02545181b07d3f8cfccf0',
 			limit: 5
 		}).addTo(map);
+
+		// PRINT
+		ctlPrint = L.browserPrint().addTo(map)
+
+		map.on("browser-print-start", function(e){
+			L.control.scale({
+				position: 'topleft',
+				imperial: false,
+				maxWidth: 200
+			}).addTo(e.printMap);
+		});
 
 	/***************************************************************************/
 
