@@ -37,6 +37,7 @@ var posicaoMouse;
 var ctlMinimap;
 var ctlSearch;
 var ctlPrint;
+var ctlMarcadores;
 
 $(function(){
 	
@@ -89,6 +90,11 @@ $(function(){
 		});
 
 		map.addLayer(camadaMapa);
+
+
+		
+
+
 
 		// Overlayer
 
@@ -220,7 +226,10 @@ $(function(){
 		}).addTo(map);
 
 		// PRINT
-		ctlPrint = L.browserPrint().addTo(map)
+		ctlPrint = L.browserPrint({
+			closePopupsOnPrint: false,      
+			printModesNames: {Portrait:"Retrato", Landscape:"Paisagem", Auto:"Auto", Custom:"Selecione a área"}
+		}).addTo(map);
 
 		map.on("browser-print-start", function(e){
 			L.control.scale({
@@ -460,6 +469,24 @@ $(function(){
 				map.fitBounds(featureLayer.getBounds());				
 			} 
 		});
+
+
+		/*
+		TENTANDO USAR MARKERCLUSTER
+		
+		ctlMarcadores = L.markerClusterGroup({ chunkedLoading: true });
+		
+		for (var i = 0; i < hidrantes.features.geometry.length; i++) {
+			var a = hidrantes[i];
+			var title = a[2];
+			var marker = L.marker(L.latLng(a[0], a[1]), { title: title });
+			marker.bindPopup(title);
+			ctlMarcadores.addLayer(marker);
+		}
+
+		map.addLayer(ctlMarcadores);
+		*/
+
 	/***************************************************************************/
 
 	// ****************** OUTRAS FUNÇÕES
