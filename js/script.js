@@ -38,6 +38,7 @@ var ctlMinimap;
 var ctlSearch;
 var ctlPrint;
 var ctlMarcadores;
+var ctlMarkers;
 
 $(function(){
 	
@@ -92,10 +93,6 @@ $(function(){
 		map.addLayer(camadaMapa);
 
 
-		
-
-
-
 		// Overlayer
 
 			/** ST COMERCIAIS */
@@ -120,6 +117,8 @@ $(function(){
 
 
 			/** HIDRANTES */
+			ctlMarkers = L.markerClusterGroup();
+
 			hidrantesOverlay = L.geoJSON(hidrantes, {
 				filter: function (feature, layerHidrantes) {
 					if (feature.properties) {
@@ -139,7 +138,14 @@ $(function(){
 						})
 					});
 				}
-			}).addTo(map);
+			});
+
+			/** CLUSTER HIDRANTES */
+			ctlMarkers.addLayer(hidrantesOverlay);
+
+			map.addLayer(ctlMarkers);
+			
+			map.fitBounds(ctlMarkers.getBounds());
 
 
 			/** OVERLAYERS */
@@ -156,7 +162,7 @@ $(function(){
 			objSobrecamadas = {
 				'Setores Comerciais': setoresComerciaisOverlay,
 				'Redes de Água': redesAguaOverlay,
-				'Hidrantes': hidrantesOverlay
+				'Hidrantes': ctlMarkers
 			};
 
 			controleCamadas = L.control.layers(objBasemaps, objSobrecamadas).addTo(map);
