@@ -458,7 +458,7 @@ $(function(){
 			layerHidrantes.bindPopup(popupConteudoHidrantes);
 
 			layerHidrantes.on({
-				click: zoomToFeature_hidrantes
+				//click: zoomToFeature_hidrantes
 			});
 
 		}
