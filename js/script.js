@@ -13,12 +13,14 @@ var objBasemaps;
 var objSobrecamadas;
 var info;
 var setoresComerciaisOverlay;
+var vazamentosOverlay;
 var hidrantesOverlay;
 var redesAguaOverlay;
 var legend;
 var layerStComerciais;
 var layerRedesAgua;
 var layerHidrantes;
+var layerVazamentos;
 var div;
 var grades;
 var labels;
@@ -32,13 +34,14 @@ var medida;
 var popupConteudoStComerciais;
 var popupConteudoRedesAgua;
 var popupConteudoHidrantes;
+var popupConteudoVazamentos;
 var zoomBar;
 var posicaoMouse;
 var ctlMinimap;
 var ctlSearch;
 var ctlPrint;
-var ctlMarcadores;
-var ctlMarkers;
+var ctlHidrantes;
+var ctlVazamentos;
 
 $(function(){
 	
@@ -117,7 +120,7 @@ $(function(){
 
 
 			/** HIDRANTES */
-			ctlMarkers = L.markerClusterGroup();
+			ctlHidrantes = L.markerClusterGroup();
 
 			hidrantesOverlay = L.geoJSON(hidrantes, {
 				filter: function (feature, layerHidrantes) {
@@ -140,12 +143,42 @@ $(function(){
 				}
 			});
 
-			/** CLUSTER HIDRANTES */
-			ctlMarkers.addLayer(hidrantesOverlay);
 
-			map.addLayer(ctlMarkers);
-			
-			map.fitBounds(ctlMarkers.getBounds());
+			/** VAZAMENTOS */
+			ctlVazamentos = L.markerClusterGroup();
+
+			vazamentosOverlay = L.geoJSON(vazamentos, {
+				filter: function (feature, layerVazamentos) {
+					if (feature.properties) {
+						return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
+					}
+					return false;
+				},
+				onEachFeature: onEachFeature_vazamentos,
+
+				pointToLayer: function (feature, latlng) {
+					return L.marker(latlng, {
+						icon: L.AwesomeMarkers.icon({
+						    icon: 'tint',
+						    markerColor: 'red',
+						    prefix: 'fa',
+						    extraClasses: 'someClass'
+						})
+					});
+				}
+			});
+
+
+			/** CLUSTER HIDRANTES */
+			ctlHidrantes.addLayer(hidrantesOverlay);
+			map.addLayer(ctlHidrantes);
+			map.fitBounds(ctlHidrantes.getBounds());
+
+
+			/** CLUSTER VAZAMENTOS */
+			ctlVazamentos.addLayer(vazamentosOverlay);
+			map.addLayer(ctlVazamentos);
+			map.fitBounds(ctlVazamentos.getBounds());
 
 
 			/** OVERLAYERS */
@@ -162,7 +195,8 @@ $(function(){
 			objSobrecamadas = {
 				'Setores Comerciais': setoresComerciaisOverlay,
 				'Redes de Água': redesAguaOverlay,
-				'Hidrantes': ctlMarkers
+				'Hidrantes': ctlHidrantes,
+				'Vazamentos': ctlVazamentos
 			};
 
 			controleCamadas = L.control.layers(objBasemaps, objSobrecamadas).addTo(map);
@@ -477,23 +511,29 @@ $(function(){
 		});
 
 
-		/*
-		TENTANDO USAR MARKERCLUSTER
-		
-		ctlMarcadores = L.markerClusterGroup({ chunkedLoading: true });
-		
-		for (var i = 0; i < hidrantes.features.geometry.length; i++) {
-			var a = hidrantes[i];
-			var title = a[2];
-			var marker = L.marker(L.latLng(a[0], a[1]), { title: title });
-			marker.bindPopup(title);
-			ctlMarcadores.addLayer(marker);
-		}
-
-		map.addLayer(ctlMarcadores);
-		*/
-
 	/***************************************************************************/
+
+
+	// ****************** FUNÇÕES VAZAMENTOS
+		function onEachFeature_vazamentos(feature, layerVazamentos) {
+			popupConteudoVazamentos = "<b>STATUS: " + feature.properties.sta_nom_status_atendimento + "<br /><b>UN:</b> " + feature.properties.uad_sgl_unidade_administrativa + "<br /><b>Serviço:</b> " + feature.properties.ser_nom_servico + "<br /><b>Bairro:</b> " + feature.properties.bai_dsc_bairro + "<br /><b>Data da solicitação:</b> " + feature.properties.iss_dat_solicitacao_servico;
+
+			if (feature.properties && feature.properties.popupConteudoVazamentos) {
+				popupConteudoVazamentos += feature.properties.popupConteudoVazamentos;
+			}
+			
+			/*layerVazamentos.bindPopup(popupConteudoVazamentos).on('click', function(e){
+				 map.setView(e.latlng, 13);
+			});*/
+			layerVazamentos.bindPopup(popupConteudoVazamentos);
+
+			layerVazamentos.on({
+				//click: zoomToFeature_vazamentos
+			});
+
+		}
+	/***************************************************************************/
+
 
 	// ****************** OUTRAS FUNÇÕES
 		function LatLngToArrayString(ll) {
