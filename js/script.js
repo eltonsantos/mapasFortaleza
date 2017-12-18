@@ -11,16 +11,30 @@ var googleSatellite;
 var controleCamadas;
 var objBasemaps;
 var objSobrecamadas;
-var info;
+
 var setoresComerciaisOverlay;
 var vazamentosOverlay;
 var hidrantesOverlay;
 var redesAguaOverlay;
-var legend;
+var bairrosOverlayer;
+var municipiosOverlayer;
+
 var layerStComerciais;
 var layerRedesAgua;
 var layerHidrantes;
 var layerVazamentos;
+var layerBairros;
+var layerMunicipios;
+
+var popupConteudoStComerciais;
+var popupConteudoRedesAgua;
+var popupConteudoHidrantes;
+var popupConteudoVazamentos;
+var popupConteudoBairros;
+var popupConteudoMunicipios;
+
+var info;
+var legend;
 var div;
 var grades;
 var labels;
@@ -31,10 +45,7 @@ var opacidade;
 var escala;
 var ctlPan;
 var medida;
-var popupConteudoStComerciais;
-var popupConteudoRedesAgua;
-var popupConteudoHidrantes;
-var popupConteudoVazamentos;
+
 var zoomBar;
 var posicaoMouse;
 var ctlMinimap;
@@ -134,14 +145,39 @@ $(function(){
 				pointToLayer: function (feature, latlng) {
 					return L.marker(latlng, {
 						icon: L.AwesomeMarkers.icon({
-						    icon: 'tint',
-						    markerColor: 'blue',
+						    icon: 'fire',
 						    prefix: 'fa',
-						    extraClasses: 'someClass	'
+						    markerColor: 'blue'
 						})
 					});
 				}
 			});
+
+
+			/** BAIRROS */
+			bairrosOverlayer = L.geoJSON(bairros, {
+				style: function(feature){
+					return {
+						color: "#500",
+						fillColor: "#009"
+					};
+				},
+				onEachFeature: onEachFeature_bai
+			}).addTo(map);
+			/*********************/
+
+
+			/** MUNICIPIOS */
+			municipiosOverlayer = L.geoJSON(municipios, {
+				style: function(feature){
+					return {
+						color: "#091",
+						fillColor: "#aa9"
+					};
+				},
+				onEachFeature: onEachFeature_mun
+			}).addTo(map);
+			/*********************/
 
 
 			/** VAZAMENTOS */
@@ -195,6 +231,8 @@ $(function(){
 			objSobrecamadas = {
 				'Setores Comerciais': setoresComerciaisOverlay,
 				'Redes de Água': redesAguaOverlay,
+				'Municípios': municipiosOverlayer,
+				'Bairros': bairrosOverlayer,
 				'Hidrantes': ctlHidrantes,
 				'Vazamentos': ctlVazamentos
 			};
@@ -280,6 +318,7 @@ $(function(){
 		});
 
 	/***************************************************************************/
+
 
 	// ****************** FUNÇÕES SETORES COMERCIAIS
 
@@ -442,6 +481,7 @@ $(function(){
 
 	/***************************************************************************/
 		
+
 	// ****************** FUNÇÕES REDES DE ÁGUA
 		function onEachFeature_redesAgua(feature, layerRedesAgua) {
 			popupConteudoRedesAgua = "<b>Tipo de Rede: " + feature.properties.tra_tipo_rede + "</b><br /><b>Data de Cadastro:</b> " + feature.properties.data_cadastro + "<br /><b>Data de Atualização:</b> " + feature.properties.data_atualizacao + "<br /><b>Extensão Calculada:</b> " + feature.properties.extensao_calculada;
@@ -473,6 +513,7 @@ $(function(){
 			} 
 		});
 	/***************************************************************************/
+
 
 	// ****************** FUNÇÕES HIDRANTES
 		function zoomToFeature_hidrantes(e) {
@@ -531,6 +572,36 @@ $(function(){
 				//click: zoomToFeature_vazamentos
 			});
 
+		}
+	/***************************************************************************/
+
+
+	// ****************** FUNÇÕES BAIRROS
+		function onEachFeature_bai(feature, layerBairros){
+			popupBairros = "<b>Nome do bairro: </b>" +feature.properties.bai_nome;
+			layerBairros.bindPopup(popupBairros);
+			layerBairros.on({
+				click: zoomBairro
+			});
+		}
+
+		function zoomBairro(e){
+			map.fitBounds(e.target.getBounds());
+		}			
+	/***************************************************************************/
+
+
+	// ****************** FUNÇÕES MUNICÍPIOS
+		function onEachFeature_mun(feature, layerMunicipios){
+			popupMunicipios = "<b>Nome do Municípios: </b>" +feature.properties.mun_toponimia;
+			layerMunicipios.bindPopup(popupMunicipios);
+			layerMunicipios.on({
+				click: zoomMunicipio
+			});
+		}
+
+		function zoomMunicipio(e){
+			map.fitBounds(e.target.getBounds());
 		}
 	/***************************************************************************/
 
