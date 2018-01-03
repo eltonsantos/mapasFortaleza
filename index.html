@@ -39,10 +39,155 @@
 	    <link rel="stylesheet" type="text/css" href="css/MarkerCluster.css" />
 	    <link rel="stylesheet" type="text/css" href="css/MarkerCluster.Default.css" />
 	    <!-- -Estilo da página -->
+	    <!--<link rel="stylesheet" type="text/css" href="css/60079c84.app.css" />-->
+	    <!--<link rel="stylesheet" type="text/css" href="css/e715c9d1.print.css" />-->
 	    <link rel="stylesheet" type="text/css" href="css/estilo.css" />
 	</head>
 	<body>
 
+		<div class="header">
+	        <header>
+	            <nav class="navbar navbar-fixed-top" role="navigation">
+	                <div class="container-fluid">
+	                    <div class="navbar-header">
+	                        <button type="button" class="navbar-toggle sidebar-toggle collapsed pull-left" data-toggle="collapse" data-target="#navbar-collapse">
+	                            <span class="sr-only">Toggle navigation</span>
+	                            <span class="icon-bar btn-inverse"></span>
+	                            <span class="icon-bar btn-inverse"></span>
+	                            <span class="icon-bar btn-inverse"></span>
+	                        </button>
+	                       
+	                        <a class="navbar-brand marginLogoCagece" href="http://www.cagece.com.br">
+			                    <img id="logoCagece" src="images/cagece.png">
+
+			                </a>
+
+			                <span class="subtitle">IGEO web</span>
+
+	                        <h1 class="section-title">Buscar...</h1>
+	                        <form class="navbar-form pull-right" id="main-form">
+	                            <div class="form-group">
+	                              <div class="input-group">
+	                                <input type="text" placeholder="Buscar por Lugares" class="form-control" id="main-form-input" autocomplete="off">
+	                                <span class="input-group-btn">
+	                                    <button class="btn btn-inverse">
+	                                        <span class="glyphicon glyphicon-search white"></span>
+	                                    </button>
+	                                </span>
+	                              </div>
+	                            </div>
+	                        </form>
+	                        <button type="button" class="navbar-toggle sidebar-toggle collapsed pull-right">
+	                            <span class="sr-only">Toggle navigation</span>
+	                            <span class="glyphicon glyphicon-menu-left"></span>
+	                        </button>                    
+	                    </div>
+	                </div>
+	            </nav>
+	        </header>
+	    </div>
+	   
+
+	    <div class="mainContainer">
+	         <div id="sidebar-wrapper-fixed">
+	            <ul class="sidebar-nav-fixed"> 
+	                <li>
+	                    <a href="#">
+	                        <i class="icon glyphicon glyphicon-stats"></i>
+	                    </a>
+	                </li>
+	                <li>
+	                    <a href="#" onclick="imprimirMapa()">
+	                        <i class="icon glyphicon glyphicon-print"></i>
+	                    </a>
+	                </li>
+	                <li>
+	                    <a href="#">
+	                        <i class="icon glyphicon glyphicon-info-sign"></i>
+	                    </a>
+	                </li>
+	            </ul>
+	        </div>
+	        
+	        <div id="wrapper" class="toggled">
+	     
+	            <!-- Sidebar -->
+	            <div id="sidebar-wrapper" class="painelLateral">
+	                
+	                <div class="col-md-12">
+	                    
+	                
+
+	                    <br />
+	                    <button id="btnLocate" class="btn btn-primary btn-block">Locate</button>
+	                    <br />
+
+	                    <div class="scContainer">
+	                        <b>Buscar por Setor Comercial:</b>
+	                        <input id="scBusca" class="form-control"  placeholder="Buscar por setor comercial" />
+	                        <br />
+	                        <b>Busca detalhada</b>
+	                        <select class="form-control" id="unSearch" name="unidade">
+	                            <option>Buscar por Unidade</option>
+	                        </select>
+	                        <br />
+	                        <select class="form-control" id="locSearch" name="localidade">
+	                            <option>Buscar por Localidade</option>
+	                        </select>
+	                        <br />
+	                        <select class="form-control" id="numSearch" name="numsetorcomercial">
+	                            <option>Buscar por Nº Setor Comercial</option>
+	                        </select>
+	                        <br />
+	                    </div>
+
+	                    <div class="raContainer">
+	                        <b>Buscar por Rede de Água:</b>
+	                        <input id="raBusca" class="form-control" placeholder="Buscar por rede de água" />
+	                    </div>
+
+	                    <div class="scContainer">
+	                        <b>Buscar por Hidrante:</b>
+	                        <input id="hiBusca" class="form-control" placeholder="Buscar por hidrante" />
+	                    </div>
+
+	                    <br />
+
+	                    <h5><b>Nível do zoom:</b> <span id="zoom-level"></span></h5>
+
+	                    <br />
+	                    
+	                    <h5>
+	                        <b>Opacidade:</b>
+	                        <span id="image-opacity">0.2</span>
+	                        <br />
+	                        <input type="range" id="sldOpacity" min="0" max="1" step="0.1" value="0.2" />
+	                    </h5>
+
+
+	                </div>
+
+
+	            </div>
+	            <!-- /#sidebar-wrapper -->
+
+	            <a href="#" class="toggles"><i class="glyphicon glyphicon-white glyphicon-chevron-left"></i></a>
+
+	            <!-- Page Content -->
+	            <div id="page-content-wrapper">
+	                   <div id="map"></div>
+	            </div>
+	            <!-- /#page-content-wrapper -->
+
+	        </div>
+	        <!-- /#wrapper -->        
+	    </div>
+
+
+
+
+
+<!--
 		<header class="navbar navbar-static-top bs-docs-nav no-print" id="top" role="banner">
 
 	        <h1 class="sr-only">Cagece | Mapas Fortaleza e Região Metropolitana</h1>        
@@ -153,6 +298,8 @@
 			</div>
 		</div>
 
+-->
+
 		<!-- Jquery -->
 	    <script type="text/javascript" src="js/jquery.min.js"></script>
 	    <!-- Jquery UI -->
@@ -171,6 +318,8 @@
 		<script type="text/javascript" src="js/geoBairros.js"></script>
 		<!-- Arquivo JSON Municípios -->
 		<script type="text/javascript" src="js/geoMunicipios.js"></script>
+		<!-- Arquivo JSON Unidades -->
+		<script type="text/javascript" src="js/geoUnidades.js"></script>
 		<!-- Plugin leaftlet search -->
 		<script type="text/javascript" src="js/leaflet-search.min.js"></script>
 		<!-- Plugin Opacity -->
@@ -201,6 +350,19 @@
 	    <script type="text/javascript" src="js/leaflet.markercluster.js"></script>
 		<!-- Script da página -->
 		<script type="text/javascript" src="js/script.js"></script>
+		
+		<!-- Menu Toggle Script -->
+        <script>
+	        $(".toggles").click(function(e) {
+	            e.preventDefault();
+	            $("#wrapper").toggleClass("toggled");
+	        });
+
+	        $(".navbar-toggle").click(function(e){
+	            //e.preventDefault();
+	            $("#sidebar-wrapper-fixed").toggleClass("open");
+	        });
+	    </script>
 
 	</body>
 </html>

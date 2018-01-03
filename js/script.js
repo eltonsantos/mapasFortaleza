@@ -18,6 +18,7 @@ var hidrantesOverlay;
 var redesAguaOverlay;
 var bairrosOverlayer;
 var municipiosOverlayer;
+var unidadesOverlayer;
 
 var layerStComerciais;
 var layerRedesAgua;
@@ -25,6 +26,7 @@ var layerHidrantes;
 var layerVazamentos;
 var layerBairros;
 var layerMunicipios;
+var layerUnidades;
 
 var popupConteudoStComerciais;
 var popupConteudoRedesAgua;
@@ -32,6 +34,7 @@ var popupConteudoHidrantes;
 var popupConteudoVazamentos;
 var popupConteudoBairros;
 var popupConteudoMunicipios;
+var popupConteudoUnidades;
 
 var info;
 var legend;
@@ -72,10 +75,12 @@ $(function(){
 		map.on('zoomend', function(){
 			$('#zoom-level').html(map.getZoom());
 		});
-
+		// id : 'mapbox.light' -- PARA MAPA PRETO E BRANCO
 		camadaMapa = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-			id: 'mapbox.light',
-			attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+			id: 'mapbox.streets',
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="http://mapbox.com">Mapbox</a>'
 		});
 
 		camadaTopo = L.tileLayer.provider('OpenTopoMap', {
@@ -109,25 +114,13 @@ $(function(){
 
 		// Overlayer
 
-			/** ST COMERCIAIS */
-			setoresComerciaisOverlay = L.geoJson(setoresComerciais, {
-				style: function(feature){
-					return {
-						color: "#1B6D9F",
-						fillColor: "#5fb5e6"
-					};
-				},
-				onEachFeature: onEachFeature_stComerciais
-			}).addTo(map);
-
-
 			/** REDE DE ÁGUA */
 			redesAguaOverlay = L.geoJson(rede_agua, {
 				style: function (feature) {
 					return feature.properties && feature.properties.style;
 				},
 				onEachFeature: onEachFeature_redesAgua
-			}).addTo(map);
+			});
 
 
 			/** HIDRANTES */
@@ -152,6 +145,7 @@ $(function(){
 					});
 				}
 			});
+			/*********************/
 
 
 			/** BAIRROS */
@@ -163,6 +157,18 @@ $(function(){
 					};
 				},
 				onEachFeature: onEachFeature_bai
+			});
+			/*********************/
+
+
+			/** UNIDADES */
+			unidadesOverlayer = L.geoJSON(unidades, {
+				style: function(feature){
+					return {
+						color: "#00CED1"
+					};
+				},
+				onEachFeature: onEachFeature_un
 			}).addTo(map);
 			/*********************/
 
@@ -178,6 +184,18 @@ $(function(){
 				onEachFeature: onEachFeature_mun
 			}).addTo(map);
 			/*********************/
+			
+
+			/** ST COMERCIAIS */
+			setoresComerciaisOverlay = L.geoJson(setoresComerciais, {
+				style: function(feature){
+					return {
+						color: "#1B6D9F",
+						fillColor: "#5fb5e6"
+					};
+				},
+				onEachFeature: onEachFeature_stComerciais
+			}).addTo(map);
 
 
 			/** VAZAMENTOS */
@@ -203,17 +221,18 @@ $(function(){
 					});
 				}
 			});
+			/*********************/
 
 
 			/** CLUSTER HIDRANTES */
 			ctlHidrantes.addLayer(hidrantesOverlay);
-			map.addLayer(ctlHidrantes);
+			//map.addLayer(ctlHidrantes);
 			map.fitBounds(ctlHidrantes.getBounds());
 
 
 			/** CLUSTER VAZAMENTOS */
 			ctlVazamentos.addLayer(vazamentosOverlay);
-			map.addLayer(ctlVazamentos);
+			//map.addLayer(ctlVazamentos);
 			map.fitBounds(ctlVazamentos.getBounds());
 
 
@@ -232,6 +251,7 @@ $(function(){
 				'Setores Comerciais': setoresComerciaisOverlay,
 				'Redes de Água': redesAguaOverlay,
 				'Municípios': municipiosOverlayer,
+				'Unidades': unidadesOverlayer,
 				'Bairros': bairrosOverlayer,
 				'Hidrantes': ctlHidrantes,
 				'Vazamentos': ctlVazamentos
@@ -337,7 +357,7 @@ $(function(){
 				: 'Passe o mouse');
 		};
 
-		info.addTo(map);
+		//info.addTo(map);
 
 		legend = L.control({position: 'bottomright'});
 
@@ -601,6 +621,21 @@ $(function(){
 		}
 
 		function zoomMunicipio(e){
+			map.fitBounds(e.target.getBounds());
+		}
+	/***************************************************************************/
+
+
+	// ****************** FUNÇÕES UNIDADES
+		function onEachFeature_un(feature, layerUnidades){
+			popupUnidades = "<b>Nome da Unidade: </b>" +feature.properties.uni_sgl_unidade_negocio;
+			layerUnidades.bindPopup(popupUnidades);
+			layerUnidades.on({
+				click: zoomUnidade
+			});
+		}
+
+		function zoomUnidade(e){
 			map.fitBounds(e.target.getBounds());
 		}
 	/***************************************************************************/
