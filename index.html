@@ -116,16 +116,11 @@
 	                
 	                <div class="col-md-12">
 	                    
-	                
-
 	                    <br />
 	                    <button id="btnLocate" class="btn btn-primary btn-block">Locate</button>
 	                    <br />
 
 	                    <div class="scContainer">
-	                        <b>Buscar por Setor Comercial:</b>
-	                        <input id="scBusca" class="form-control"  placeholder="Buscar por setor comercial" />
-	                        <br />
 	                        <b>Busca detalhada</b>
 	                        <select class="form-control" id="unSearch" name="unidade">
 	                            <option>Buscar por Unidade</option>
@@ -139,6 +134,16 @@
 	                            <option>Buscar por Nº Setor Comercial</option>
 	                        </select>
 	                        <br />
+	                        <select class="form-control" id="quaSearch" name="quadra">
+	                            <option>Buscar por Nº Quadra</option>
+	                        </select>
+	                    </div>
+
+	                    <hr />
+
+	                    <div class="raContainer">
+	                    	<b>Buscar por Setor Comercial:</b>
+	                        <input id="scBusca" class="form-control"  placeholder="Buscar por setor comercial" />
 	                    </div>
 
 	                    <div class="raContainer">
@@ -320,6 +325,8 @@
 		<script type="text/javascript" src="js/geoMunicipios.js"></script>
 		<!-- Arquivo JSON Unidades -->
 		<script type="text/javascript" src="js/geoUnidades.js"></script>
+		<!-- Arquivo JSON Quadras -->
+		<script type="text/javascript" src="js/geoQuadras.js"></script>
 		<!-- Plugin leaftlet search -->
 		<script type="text/javascript" src="js/leaflet-search.min.js"></script>
 		<!-- Plugin Opacity -->

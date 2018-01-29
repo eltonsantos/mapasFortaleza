@@ -19,6 +19,7 @@ var redesAguaOverlay;
 var bairrosOverlayer;
 var municipiosOverlayer;
 var unidadesOverlayer;
+var quadrasOverlay;
 
 var layerStComerciais;
 var layerRedesAgua;
@@ -27,6 +28,7 @@ var layerVazamentos;
 var layerBairros;
 var layerMunicipios;
 var layerUnidades;
+var layerQuadras;
 
 var popupConteudoStComerciais;
 var popupConteudoRedesAgua;
@@ -35,6 +37,7 @@ var popupConteudoVazamentos;
 var popupConteudoBairros;
 var popupConteudoMunicipios;
 var popupConteudoUnidades;
+var popupQuadras;
 
 var info;
 var legend;
@@ -121,6 +124,17 @@ $(function(){
 				},
 				onEachFeature: onEachFeature_redesAgua
 			});
+			/*********************/
+
+
+			/** QUADRAS */
+			quadrasOverlay = L.geoJson(quadras, {
+				style: function (feature) {
+					return feature.properties && feature.properties.style;
+				},
+				onEachFeature: onEachFeature_quadras
+			});
+			/*********************/
 
 
 			/** HIDRANTES */
@@ -152,8 +166,8 @@ $(function(){
 			bairrosOverlayer = L.geoJSON(bairros, {
 				style: function(feature){
 					return {
-						color: "#500",
-						fillColor: "#009"
+						color: "#999",
+						fillColor: "#f90"
 					};
 				},
 				onEachFeature: onEachFeature_bai
@@ -254,7 +268,8 @@ $(function(){
 				'Unidades': unidadesOverlayer,
 				'Bairros': bairrosOverlayer,
 				'Hidrantes': ctlHidrantes,
-				'Vazamentos': ctlVazamentos
+				'Vazamentos': ctlVazamentos,
+				'Quadras': quadrasOverlay 
 			};
 
 			controleCamadas = L.control.layers(objBasemaps, objSobrecamadas).addTo(map);
@@ -621,6 +636,21 @@ $(function(){
 		}
 
 		function zoomMunicipio(e){
+			map.fitBounds(e.target.getBounds());
+		}
+	/***************************************************************************/
+
+
+	// ****************** FUNÇÕES QUADRAS
+		function onEachFeature_quadras(feature, layerQuadras){
+			popupQuadras = "<b>Número da Quadra: </b>" +feature.properties.num_quadra;
+			layerQuadras.bindPopup(popupQuadras);
+			layerQuadras.on({
+				click: zoomQuadra
+			});
+		}
+
+		function zoomQuadra(e){
 			map.fitBounds(e.target.getBounds());
 		}
 	/***************************************************************************/
