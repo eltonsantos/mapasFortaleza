@@ -355,9 +355,117 @@ $(function(){
 	/***************************************************************************/
 
 
+	// ****************** BUSCA ANINHADAS
+
+	//Agrupa Unidades
+	//console.log(setoresComerciais.features[0].properties)
+	var groupsUnidade = [];
+	var uniqueUnidade = [];
+
+	//$('#unSearch').append('<option value="">Selecione</option>');
+	console.log(groupsUnidade)
+	setoresComerciais.features.map(function(prop) {
+		groupsUnidade.push(prop.properties.sco_dsc_un);
+	});
+
+	uniqueUnidade = Array.from(new Set(groupsUnidade)); // [1,2,3,4,5]
+
+	uniqueUnidade.map(function(value) {
+	  $('#unSearch').append($('<option/>', {
+	      value: value,
+	      text: value
+	  }));
+	});
+
+	//Get Localidades ao alterar UNIDADE
+	$('#unSearch').on('change', function() {
+		var value = $(this).find(':selected').val();
+		var groupsLocalidade = [];
+		var uniqueLocalidade = [];
+
+		setoresComerciais.features.filter(function(prop) {
+		    if (prop.properties.sco_dsc_un.toLowerCase().trim() === value.toLowerCase().trim()) {
+		    	groupsLocalidade.push(prop.properties.sco_dsc_loc);
+		    }
+		});
+
+		console.log(groupsLocalidade)
+		groupsLocalidade = Array.from(new Set(groupsLocalidade)); // [1,2,3,4,5]
+		console.log('Unique: ' + groupsLocalidade)
+
+		groupsLocalidade.sort(function(a, b){
+			return a-b;
+		});
+
+		$('#locSearch').empty();
+		$('#numSearch').empty();
+		$('#locSearch').append('<option value="">Buscar por Localidade</option>');
+		$('#numSearch').append('<option value="">Buscar por Nº do Setor Comercial</option>');
+		
+		groupsLocalidade.map(function(prop) {
+			$('#locSearch').append($('<option />', {
+				value: prop,
+				text: prop
+			}));
+		});
+
+	});
+
+	//Get SetorComercial ao alterar LOCALIDADE
+	$('#locSearch').on('change', function() {
+	  var value = $(this).find(':selected').val();
+	  var groupsSetorComercial = [];
+	  var uniqueLocalidade = [];
+
+	  setoresComerciais.features.filter(function(prop) {
+	      if (prop.properties.sco_dsc_loc.toLowerCase().trim() === value.toLowerCase().trim()) {
+	      	groupsSetorComercial.push(prop.properties.sco_num_sc);
+	      }
+	  });
+
+	  console.log(groupsSetorComercial)
+	  groupsSetorComercial = Array.from(new Set(groupsSetorComercial)); // [1,2,3,4,5]
+	  console.log('Unique SC: ' + groupsSetorComercial)
+
+			groupsSetorComercial.sort(function(a, b){
+				return a-b;
+			});
+
+	  $('#numSearch').sort().empty();
+			$('#numSearch').append('<option value="">Buscar por Nº do Setor Comercial</option>');
+	  groupsSetorComercial.map(function(prop) {
+	      $('#numSearch').append($('<option />', {
+		      value: prop,
+		      text: prop
+	      }));
+
+	  });
+
+	});
+
+	var leafletIdJsonProperty = {}
+
+	$("#numSearch").on('change', function(e) {
+		var value = $(this).find(':selected').val();
+		var boundArea = parseInt(value);
+		map.fitBounds(setoresComerciaisOverlay._layers[leafletIdJsonProperty[boundArea]]._bounds);
+	});
+
+	function MatchJSONProperty(jsonData, leafletLayer) {
+	    for (feature in leafletLayer._layers) {
+	        //A JS Object consisting of GeoJSON ID, Leaflet Layer ID
+	        leafletIdJsonProperty[leafletLayer._layers[feature].feature.properties.sco_num_sc] = parseInt(feature)
+	    }
+	}
+
+	MatchJSONProperty(setoresComerciais, setoresComerciaisOverlay)
+	/***************************************************************************/
+
+
 	// ****************** FUNÇÕES SETORES COMERCIAIS
 
 		// Mostra as informações no mouse hover
+		/*
 		info = L.control();
 
 		info.onAdd = function (map) {
@@ -371,7 +479,7 @@ $(function(){
 				'<b>Setor Comercial: ' + props.sco_num_sc + '</b><br /><b>Localidade:</b> ' + props.sco_dsc_loc + '<br /><b>UN:</b> ' + props.sco_dsc_un + '<br /><b>Set. de Abast.:</b> ' + props.sco_dsc_sa + '<br /><b>Código do Set. de Abast.:</b> ' + props.sco_cod_sa
 				: 'Passe o mouse');
 		};
-
+		*/
 		//info.addTo(map);
 
 		legend = L.control({position: 'bottomright'});
@@ -432,12 +540,12 @@ $(function(){
 				layerStComerciais.bringToFront();
 			}
 
-			info.update(layerStComerciais.feature.properties);
+			//info.update(layerStComerciais.feature.properties);
 		}
 
 		function resetHighlight_stComerciais(e) {
 			setoresComerciaisOverlay.resetStyle(e.target);
-			info.update();
+			//info.update();
 		}
 
 		function zoomToFeature_stComerciais(e) {
@@ -473,47 +581,6 @@ $(function(){
 				map.fitBounds(featureLayer.getBounds());				
 			} 
 		});
-/*
-		$("#scBuscaUnidade").autocomplete({
-			source: setoresComerciais.features.map(function(d, i){
-				return { 
-					label: d.properties.sco_dsc_un,
-					id: i
-				}
-			}),
-			select: function(event, ui){
-				var featureLayer = L.geoJSON(setoresComerciais.features[ui.item.id]);
-				map.fitBounds(featureLayer.getBounds());				
-			} 
-		});
-
-		$("#scBuscaLocalidade").autocomplete({
-			source: setoresComerciais.features.map(function(d, i){
-				return { 
-					label: d.properties.sco_dsc_loc,
-					id: i
-				}
-			}),
-			select: function(event, ui){
-				var featureLayer = L.geoJSON(setoresComerciais.features[ui.item.id]);
-				map.fitBounds(featureLayer.getBounds());				
-			} 
-		});
-
-		$("#scBuscaNumSetor").autocomplete({
-			source: setoresComerciais.features.map(function(d, i){
-				return { 
-					label: d.properties.sco_num_sc,
-					id: i
-				}
-			}),
-			select: function(event, ui){
-				var featureLayer = L.geoJSON(setoresComerciais.features[ui.item.id]);
-				map.fitBounds(featureLayer.getBounds());				
-			} 
-		});
-*/
-
 	/***************************************************************************/
 		
 
@@ -576,7 +643,7 @@ $(function(){
 		$("#hiBusca").autocomplete({
 			source: hidrantes.features.map(function(d, i){
 				return { 
-					label: d.properties.setor_abastecimento + " - " + d.properties.bairro,
+					label: d.properties.unidade_negocio + " - " + d.properties.setor_abastecimento + " - " + d.properties.quadricula + " - " + d.properties.bairro,
 					id: i
 				}
 			}),
