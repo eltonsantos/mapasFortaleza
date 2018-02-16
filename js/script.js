@@ -60,6 +60,9 @@ var ctlPrint;
 var ctlHidrantes;
 var ctlVazamentos;
 
+var hidranteIcon;
+var vazamentoIcon;
+
 $(function(){
 	
 	// ****************** FUNÇÕES GERAIS
@@ -72,7 +75,7 @@ $(function(){
 		});
 
 		$('#btnLocate').click(function(){
-			map.setView([ -3.794,  -38.545], 12);
+			map.setView([ -5.321, -39.367], 8);
 		});
 
 		map.on('zoomend', function(){
@@ -138,6 +141,11 @@ $(function(){
 
 
 			/** HIDRANTES */
+			hidranteIcon = new L.Icon({
+		        iconUrl: 'images/hidrante.png',
+		        iconSize: [24, 36]
+		    });
+
 			ctlHidrantes = L.markerClusterGroup();
 
 			hidrantesOverlay = L.geoJSON(hidrantes, {
@@ -151,11 +159,12 @@ $(function(){
 
 				pointToLayer: function (feature, latlng) {
 					return L.marker(latlng, {
-						icon: L.AwesomeMarkers.icon({
+						icon: hidranteIcon
+						/*icon: L.AwesomeMarkers.icon({
 						    icon: 'fire',
 						    prefix: 'fa',
 						    markerColor: 'blue'
-						})
+						})*/
 					});
 				}
 			});
@@ -213,6 +222,11 @@ $(function(){
 
 
 			/** VAZAMENTOS */
+			vazamentoIcon = new L.Icon({
+		        iconUrl: 'images/vazamento4.png',
+		        iconSize: [38, 36]
+		    });
+
 			ctlVazamentos = L.markerClusterGroup();
 
 			vazamentosOverlay = L.geoJSON(vazamentos, {
@@ -226,12 +240,13 @@ $(function(){
 
 				pointToLayer: function (feature, latlng) {
 					return L.marker(latlng, {
-						icon: L.AwesomeMarkers.icon({
+						icon: vazamentoIcon
+						/*icon: L.AwesomeMarkers.icon({
 						    icon: 'tint',
 						    markerColor: 'red',
 						    prefix: 'fa',
 						    extraClasses: 'someClass'
-						})
+						})*/
 					});
 				}
 			});
