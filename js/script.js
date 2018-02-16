@@ -67,8 +67,8 @@ $(function(){
 	
 	// ****************** FUNÇÕES GERAIS
 		map = L.map('map', {
-			center: [-3.794, -38.545],
-			zoom: 12,
+			center: [-5.321, -39.367],
+			zoom: 8,
 			maxZoom: 20,
 			minZoom: 7,
 			zoomControl: false
