@@ -131,12 +131,18 @@ $(function(){
 
 
 			/** QUADRAS */
-			quadrasOverlay = L.geoJson(quadras, {
+			quadrasOverlay = L.tileLayer.wms("http://172.25.131.53:8080/geoserver/wms/", {
+		        layers: 'IGEO:quadras_mapeadas',
+		        format: 'image/png',
+		        transparent: true,
+		        attribution: "Algum texto de teste"
+		    });
+			/*quadrasOverlay = L.geoJson(quadras, {
 				style: function (feature) {
 					return feature.properties && feature.properties.style;
 				},
 				onEachFeature: onEachFeature_quadras
-			});
+			});*/
 			/*********************/
 
 
