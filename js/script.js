@@ -198,7 +198,7 @@ $(function(){
 					};
 				},
 				onEachFeature: onEachFeature_un
-			}).addTo(map);
+			});
 			/*********************/
 
 
@@ -211,7 +211,7 @@ $(function(){
 					};
 				},
 				onEachFeature: onEachFeature_mun
-			}).addTo(map);
+			});
 			/*********************/
 			
 
@@ -224,7 +224,7 @@ $(function(){
 					};
 				},
 				onEachFeature: onEachFeature_stComerciais
-			}).addTo(map);
+			});
 
 
 			/** VAZAMENTOS */
@@ -763,6 +763,38 @@ $(function(){
 		function LatLngToArrayString(ll) {
 			return "<b>X:</b> "+ ll.lat.toFixed(5)+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Y:</b> "+ll.lng.toFixed(5);
 		}
+
+		map.on('zoomend', function() {
+			if (map.getZoom() < 12) {
+				if (map.hasLayer(setoresComerciaisOverlay)) {
+					map.removeLayer(setoresComerciaisOverlay);
+				}
+			}
+			if (map.getZoom() >= 12) {
+				if (map.hasLayer(setoresComerciaisOverlay)) {
+
+				}
+				else {
+					map.addLayer(setoresComerciaisOverlay);
+				}
+			}
+
+			if (map.getZoom() < 15) {
+				if (map.hasLayer(quadrasOverlay)) {
+					map.removeLayer(quadrasOverlay);
+				}
+			}
+			if (map.getZoom() >= 15) {
+				if (map.hasLayer(quadrasOverlay)) {
+
+				}
+				else {
+					map.addLayer(quadrasOverlay);
+				}
+			}
+
+
+		});
 	/***************************************************************************/
 
 });
