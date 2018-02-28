@@ -59,6 +59,7 @@ var ctlSearch;
 var ctlPrint;
 var ctlHidrantes;
 var ctlVazamentos;
+var ctlMeasure;
 
 var hidranteIcon;
 var vazamentoIcon;
@@ -793,8 +794,20 @@ $(function(){
 				}
 			}
 
-
 		});
+
+		ctlMeasure = L.control.measure({
+			position: 'topleft',
+			primaryLengthUnit: 'meters',
+			secondaryLengthUnit: 'kilometers',
+			meters: {
+				display: "metros"
+			},
+			kilometers: {
+				display: "quilômetros"
+			}
+		});
+		ctlMeasure.addTo(map);
 	/***************************************************************************/
 
 });
