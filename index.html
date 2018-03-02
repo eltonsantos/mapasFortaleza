@@ -183,7 +183,10 @@
 	            </div>
 	            <!-- /#sidebar-wrapper -->
 
-	            <a href="#" class="toggles"><i class="glyphicon glyphicon-white glyphicon-chevron-left"></i></a>
+	            <a href="#" class="toggles">
+	            	<i id="botaonav-esquerdo" class="glyphicon glyphicon-white glyphicon-chevron-left "></i>
+	            	<i id="botaonav-direito" class="glyphicon glyphicon-white glyphicon-chevron-right"></i>
+	            </a>
 
 	            <!-- Page Content -->
 	            <div id="page-content-wrapper">
@@ -372,10 +375,11 @@
 	        $(".toggles").click(function(e) {
 	            e.preventDefault();
 	            $("#wrapper").toggleClass("toggled");
+	            $("#botaonav-direito").addClass("botaonav-direito");
 	        });
 
 	        $(".navbar-toggle").click(function(e){
-	            //e.preventDefault();
+	            e.preventDefault();
 	            $("#sidebar-wrapper-fixed").toggleClass("open");
 	        });
 	    </script>

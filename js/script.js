@@ -798,6 +798,7 @@ $(function(){
 
 		ctlMeasure = L.control.measure({
 			position: 'topleft',
+			primaryAreaUnit: 'hectares',
 			primaryLengthUnit: 'meters',
 			secondaryLengthUnit: 'kilometers',
 			meters: {
