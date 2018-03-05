@@ -1,76 +1,78 @@
-// Variáveis
-var map;
-var camadaMapa;
-var camadaMapa2;
-var camadaTopo;
-var camadaImagery;
-var googleTerrain;
-var googleStreet;
-var googleHybrid;
-var googleSatellite;
-var controleCamadas;
-var objBasemaps;
-var objSobrecamadas;
+function init(){
+	
+	// Variáveis
+	var map;
+	var openMap;
+	var camadaMapa;
+	var camadaMapa2;
+	var camadaTopo;
+	var camadaImagery;
+	var googleTerrain;
+	var googleStreet;
+	var googleHybrid;
+	var googleSatellite;
+	var controleCamadas;
+	var objBasemaps;
+	var objSobrecamadas;
 
-var setoresComerciaisOverlay;
-var vazamentosOverlay;
-var hidrantesOverlay;
-var redesAguaOverlay;
-var bairrosOverlayer;
-var municipiosOverlayer;
-var unidadesOverlayer;
-var quadrasOverlay;
+	var setoresComerciaisOverlay;
+	var vazamentosOverlay;
+	var hidrantesOverlay;
+	var redesAguaOverlay;
+	var bairrosOverlayer;
+	var municipiosOverlayer;
+	var unidadesOverlayer;
+	var quadrasOverlay;
 
-var layerStComerciais;
-var layerRedesAgua;
-var layerHidrantes;
-var layerVazamentos;
-var layerBairros;
-var layerMunicipios;
-var layerUnidades;
-var layerQuadras;
+	var layerStComerciais;
+	var layerRedesAgua;
+	var layerHidrantes;
+	var layerVazamentos;
+	var layerBairros;
+	var layerMunicipios;
+	var layerUnidades;
+	var layerQuadras;
 
-var popupConteudoStComerciais;
-var popupConteudoRedesAgua;
-var popupConteudoHidrantes;
-var popupConteudoVazamentos;
-var popupConteudoBairros;
-var popupConteudoMunicipios;
-var popupConteudoUnidades;
-var popupQuadras;
+	var popupConteudoStComerciais;
+	var popupConteudoRedesAgua;
+	var popupConteudoHidrantes;
+	var popupConteudoVazamentos;
+	var popupConteudoBairros;
+	var popupConteudoMunicipios;
+	var popupConteudoUnidades;
+	var popupQuadras;
 
-var info;
-var legend;
-var div;
-var grades;
-var labels;
-var from;
-var to;
-var ctlZoomslider;
-var opacidade;
-var escala;
-var ctlPan;
-var medida;
+	var info;
+	var legend;
+	var div;
+	var grades;
+	var labels;
+	var from;
+	var to;
+	var ctlZoomslider;
+	var opacidade;
+	var escala;
+	var ctlPan;
+	var medida;
 
-var zoomBar;
-var posicaoMouse;
-var ctlMinimap;
-var ctlSearch;
-var ctlPrint;
-var ctlHidrantes;
-var ctlVazamentos;
-var ctlMeasure;
+	var zoomBar;
+	var posicaoMouse;
+	var ctlMinimap;
+	var ctlSearch;
+	var ctlPrint;
+	var ctlHidrantes;
+	var ctlVazamentos;
+	var ctlMeasure;
 
-var hidranteIcon;
-var vazamentoIcon;
+	var hidranteIcon;
+	var vazamentoIcon;
 
-$(function(){
 	
 	// ****************** FUNÇÕES GERAIS
 		map = L.map('map', {
 			center: [-5.321, -39.367],
 			zoom: 8,
-			maxZoom: 20,
+			maxZoom: 22,
 			minZoom: 7,
 			zoomControl: false
 		});
@@ -89,6 +91,14 @@ $(function(){
 			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 			'Imagery © <a href="http://mapbox.com">Mapbox</a>'
 		});
+
+		var osmLink = "<a href='http://www.openstreetmap.org'>Open StreetMap</a>";
+
+		openMap = L.tileLayer(
+          "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: osmLink,
+            maxZoom: 22
+        });
 
 		camadaTopo = L.tileLayer.provider('OpenTopoMap', {
 			attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
@@ -116,7 +126,7 @@ $(function(){
 		    subdomains:['mt0','mt1','mt2','mt3']
 		});
 
-		map.addLayer(camadaMapa);
+		map.addLayer(openMap);
 
 
 		// Overlayer
@@ -274,7 +284,8 @@ $(function(){
 
 			/** OVERLAYERS */
 			objBasemaps = {
-				"Mapa tradicional": camadaMapa,
+				"OpenStreetMap" : openMap,
+				"Mapbox": camadaMapa,
 				"OpenTopoMap": camadaTopo,
 				"Satélite": camadaImagery,
 				"Google (Terreno)": googleTerrain, 
@@ -811,8 +822,10 @@ $(function(){
 		ctlMeasure.addTo(map);
 	/***************************************************************************/
 
-});
+	
+
+}
 
 function imprimirMapa() {
-	window.print();
-}
+		window.print();
+	}

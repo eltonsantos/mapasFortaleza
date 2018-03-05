@@ -50,7 +50,7 @@
 	    </script>
 
 	</head>
-	<body>
+	<body onload="init()">
 
 		<div class="header">
 	        <header>
@@ -197,123 +197,6 @@
 	        </div>
 	        <!-- /#wrapper -->        
 	    </div>
-
-
-
-
-
-<!--
-		<header class="navbar navbar-static-top bs-docs-nav no-print" id="top" role="banner">
-
-	        <h1 class="sr-only">Cagece | Mapas Fortaleza e Região Metropolitana</h1>        
-
-            <div class="navbar-header col-lg-6 col-md-6 col-sm-6">
-                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
-                    <span class="sr-only">Toggle navegação</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                
-                <a class="navbar-brand marginLogoCagece" href="http://www.cagece.com.br">
-                    <img id="logoCagece" src="images/cagece.png">
-
-                </a>
-
-                <span class="subtitle">IGEO web</span>
-               
-            </div>
-
-            <ul class="nav navbar-nav navbar-icons">
-            	<li class="text-center" onclick="imprimirMapa()">
-            		<a href="#">
-	            		<span class="fa fa-print"></span>            	
-	            		<small>Imprimir</small>
-            		</a>
-            	</li>
-
-            	<li class="text-center">
-            		<a href="#">
-	            		<span class="fa fa-download"></span>
-	            		<small>Download</small>
-            		</a>
-            	</li>
-
-            	<li class="text-center">
-            		<a href="#">
-	            		<span class="fa fa-question-circle"></span>    
-	            		<small>Ajuda</small>
-            		</a>
-            	</li>
-            </ul>        
-
-		</header>
-
-	    <div class="retGreen no-print"></div>
-
-		<div class="col-md-2 no-print">
-			
-			<br />
-			<button id="btnLocate" class="btn btn-primary btn-block">Locate</button>
-			<br />
-
-			<div class="scContainer">
-				<b>Buscar por Setor Comercial:</b>
-				<input id="scBusca" class="form-control"  placeholder="Buscar por setor comercial" />
-				<br />
-				<b>Busca detalhada</b>
-				<select class="form-control" id="unSearch" name="unidade">
-					<option>Buscar por Unidade</option>
-				</select>
-				<br />
-				<select class="form-control" id="locSearch" name="localidade">
-					<option>Buscar por Localidade</option>
-				</select>
-				<br />
-				<select class="form-control" id="numSearch" name="numsetorcomercial">
-					<option>Buscar por Nº Setor Comercial</option>
-				</select>
-				<br />
-			</div>
-
-			<div class="raContainer">
-				<b>Buscar por Rede de Água:</b>
-				<input id="raBusca" class="form-control" placeholder="Buscar por rede de água" />
-			</div>
-
-			<div class="scContainer">
-				<b>Buscar por Hidrante:</b>
-				<input id="hiBusca" class="form-control" placeholder="Buscar por hidrante" />
-			</div>
-
-			<br />
-
-			<h5><b>Nível do zoom:</b> <span id="zoom-level"></span></h5>
-
-			<br />
-			
-			<h5>
-				<b>Opacidade:</b>
-				<span id="image-opacity">0.2</span>
-				<br />
-				<input type="range" id="sldOpacity" min="0" max="1" step="0.1" value="0.2" />
-			</h5>
-			
-		</div>
-
-		<div class="col-md-10">
-			<div class="PrintApenas">
-				<img id="printLogo" src="images/cagece.png" />
-			</div>
-			<div class="PrintApenas">
-				<img id="setaNorte" src="images/seta-norte.svg" />
-			</div>
-			<div class="row">
-				<div id='map'></div>
-			</div>
-		</div>
-
--->
 
 		<!-- Jquery -->
 	    <script type="text/javascript" src="js/jquery.min.js"></script>
